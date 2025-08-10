@@ -116,7 +116,7 @@ export default function Header() {
                       href="/contact"
                       className="block py-2 text-gray-700 hover:text-gray-900"
                     >
-                      Contact
+                      Contact Edit
                     </Link>
                   </NavigationMenuItem>
                 </NavigationMenuList>
