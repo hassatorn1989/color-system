@@ -17,7 +17,7 @@ export default function Home() {
               Get Started
             </Button>
             <Button variant="outline">
-              Learn More
+              Learn More wrwrtetre
             </Button>
           </div>
         </div>
