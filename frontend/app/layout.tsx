@@ -38,7 +38,7 @@ export default function RootLayout({
       >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <Header />
-          <main className="container mx-auto max-w-7xl px-4 py-8">
+          <main className="container mx-auto max-w-7xl top-0">
             {children}
           </main>
         </ThemeProvider>
