@@ -4,9 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\GroupColorController;
 use App\Http\Controllers\ColorController;
 use App\Http\Controllers\ModeGroupColorController;
-Route::get('/', function () {
-    return view('group_color.index');
-});
+
 // router group 
 Route::middleware(['auth'])->group(function () {
 
