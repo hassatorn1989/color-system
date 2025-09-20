@@ -18,8 +18,15 @@ class DatabaseSeeder extends Seeder
         // User::factory(10)->create();
 
         User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+            'id' => \Str::uuid(),
+            'username' => 'admin',
+            'fullname' => 'Administrator',
+            'password' => bcrypt('admin123'),
+            'role' => 'admin',
+            'status' => true,
+            'created_at' => now(),
+            'updated_at' => now(),
+            'deleted_at' => null,
         ]);
 
         GroupColor::factory()->create([
@@ -38,8 +45,8 @@ class DatabaseSeeder extends Seeder
             'created_at' => now(),
             'updated_at' => now(),
             'deleted_at' => null,
-            'created_by' => User::first()->name,
-            'updated_by' => User::first()->name,
+            'created_by' => 'System',
+            'updated_by' => 'System',
         ]);
 
         Color::factory()->create([
@@ -50,8 +57,8 @@ class DatabaseSeeder extends Seeder
             'created_at' => now(),
             'updated_at' => now(),
             'deleted_at' => null,
-            'created_by' => User::first()->name,
-            'updated_by' => User::first()->name,
+            'created_by' => 'System',
+            'updated_by' => 'System',
         ]);
 
         Color::factory()->create([
@@ -62,8 +69,8 @@ class DatabaseSeeder extends Seeder
             'created_at' => now(),
             'updated_at' => now(),
             'deleted_at' => null,
-            'created_by' => User::first()->name,
-            'updated_by' => User::first()->name,
+            'created_by' => 'System',
+            'updated_by' => 'System',
         ]);
 
         Color::factory()->create([
@@ -74,8 +81,8 @@ class DatabaseSeeder extends Seeder
             'created_at' => now(),
             'updated_at' => now(),
             'deleted_at' => null,
-            'created_by' => User::first()->name,
-            'updated_by' => User::first()->name,
+            'created_by' => 'System',
+            'updated_by' => 'System',
         ]);
 
         Color::factory()->create([
@@ -86,8 +93,8 @@ class DatabaseSeeder extends Seeder
             'created_at' => now(),
             'updated_at' => now(),
             'deleted_at' => null,
-            'created_by' => User::first()->name,
-            'updated_by' => User::first()->name,
+            'created_by' => 'System',
+            'updated_by' => 'System',
         ]);
 
         Color::factory()->create([
@@ -98,8 +105,8 @@ class DatabaseSeeder extends Seeder
             'created_at' => now(),
             'updated_at' => now(),
             'deleted_at' => null,
-            'created_by' => User::first()->name,
-            'updated_by' => User::first()->name,
+            'created_by' => 'System',
+            'updated_by' => 'System',
         ]);
 
         Color::factory()->create([
@@ -110,8 +117,8 @@ class DatabaseSeeder extends Seeder
             'created_at' => now(),
             'updated_at' => now(),
             'deleted_at' => null,
-            'created_by' => User::first()->name,
-            'updated_by' => User::first()->name,
+            'created_by' => 'System',
+            'updated_by' => 'System',
         ]);
 
         Color::factory()->create([
@@ -122,8 +129,8 @@ class DatabaseSeeder extends Seeder
             'created_at' => now(),
             'updated_at' => now(),
             'deleted_at' => null,
-            'created_by' => User::first()->name,
-            'updated_by' => User::first()->name,
+            'created_by' => 'System',
+            'updated_by' => 'System',
         ]);
 
         Color::factory()->create([
@@ -134,8 +141,8 @@ class DatabaseSeeder extends Seeder
             'created_at' => now(),
             'updated_at' => now(),
             'deleted_at' => null,
-            'created_by' => User::first()->name,
-            'updated_by' => User::first()->name,
+            'created_by' => 'System',
+            'updated_by' => 'System',
         ]);
 
         Color::factory()->create([
@@ -146,8 +153,8 @@ class DatabaseSeeder extends Seeder
             'created_at' => now(),
             'updated_at' => now(),
             'deleted_at' => null,
-            'created_by' => User::first()->name,
-            'updated_by' => User::first()->name,
+            'created_by' => 'System',
+            'updated_by' => 'System',
         ]);
 
         Color::factory()->create([
@@ -158,8 +165,8 @@ class DatabaseSeeder extends Seeder
             'created_at' => now(),
             'updated_at' => now(),
             'deleted_at' => null,
-            'created_by' => User::first()->name,
-            'updated_by' => User::first()->name,
+            'created_by' => 'System',
+            'updated_by' => 'System',
         ]);
 
         Color::factory()->create([
@@ -170,8 +177,8 @@ class DatabaseSeeder extends Seeder
             'created_at' => now(),
             'updated_at' => now(),
             'deleted_at' => null,
-            'created_by' => User::first()->name,
-            'updated_by' => User::first()->name,
+            'created_by' => 'System',
+            'updated_by' => 'System',
         ]);
     }
 }
