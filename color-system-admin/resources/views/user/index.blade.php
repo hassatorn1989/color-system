@@ -101,26 +101,26 @@
                     @csrf
                     <div class="modal-body">
                         <div class="form-group">
-                            <label for="username">User Name</label>
+                            <label for="username">User Name <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="username" name="username"
                                 placeholder="Enter username">
                         </div>
 
                         <div class="form-group">
-                            <label for="fullname">Full Name</label>
+                            <label for="fullname">Full Name <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="fullname" name="fullname"
                                 placeholder="Enter full name">
                         </div>
 
                         <div class="form-group">
-                            <label for="password">Password</label>
+                            <label for="password">Password <span class="text-danger">*</span></label>
                             <input type="password" class="form-control" id="password" name="password"
                                 placeholder="Enter password">
                         </div>
 
                         {{-- role --}}
                         <div class="form-group">
-                            <label for="role">Role</label>
+                            <label for="role">Role <span class="text-danger">*</span></label>
                             <select class="form-control" id="role" name="role">
                                 <option value="admin">Admin</option>
                                 <option value="user">User</option>

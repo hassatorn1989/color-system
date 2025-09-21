@@ -71,7 +71,7 @@ $(document).ready(function () {
                     }
                     return false;
                 },
-                extension: "png|jpg|jpeg|svg",
+                // extension: "png|jpg|jpeg|svg",
                 filesize: 2 * 1024 * 1024, // 2 MB in bytes
             },
         },
