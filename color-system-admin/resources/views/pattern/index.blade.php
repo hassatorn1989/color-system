@@ -62,7 +62,8 @@
                                     </button>
                                 </div>
                                 <div class="row">
-                                    @foreach ($patterns as $pattern)
+                                    @if (count($patterns) > 0)
+                                       @foreach ($patterns as $pattern)
                                         <div class="col-3 mb-3">
                                             <div class="card" style="width: 100%;">
                                                 <div class="card-header">
@@ -90,6 +91,14 @@
                                             </div>
                                         </div>
                                     @endforeach
+                                    @else
+                                        <div class="col-12">
+                                            <div class="alert alert-warning text-center" role="alert">
+                                                No patterns found. Please add a new pattern.
+                                            </div>
+                                        </div>
+                                    @endif
+
                                 </div>
                             </div>
                         </div>
