@@ -16,7 +16,6 @@ class ChangePasswordController extends Controller
             'current_password' => 'required',
             'new_password' => 'required',
         ]);
-        dd($request->all());
 
         // Update the user's password
         auth()->user()->update([

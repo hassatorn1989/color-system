@@ -41,7 +41,8 @@
                                     </button>
                                 </div>
                                 <div class="row">
-                                    @foreach ($groupColors as $groupColor)
+                                    @if (count($groupColors) > 0)
+                                       @foreach ($groupColors as $groupColor)
                                         <div class="col-md-3 mb-3">
                                             <div class="card " style="width: 18rem;">
                                                 <div class="card-header">
@@ -72,6 +73,14 @@
                                             </div>
                                         </div>
                                     @endforeach
+                                    @else
+                                        <div class="col-12">
+                                            <div class="alert alert-warning text-center" role="alert">
+                                                No colors found. Please add a new color group.
+                                            </div>
+                                        </div>
+                                    @endif
+
                                 </div>
                             </div>
                         </div>
