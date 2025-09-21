@@ -22,7 +22,7 @@
         <!-- /.login-logo -->
         <div class="card card-outline card-primary">
             <div class="card-header text-center">
-                <h1><b>Corlor </b>System</h1>
+                <h1><b>Color </b>System</h1>
             </div>
             <div class="card-body">
                 <p class="login-box-msg">Sign in to start your session</p>
