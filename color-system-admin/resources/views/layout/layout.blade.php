@@ -7,8 +7,8 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Color Management System | @yield('title')</title>
 
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="{{ asset('assets/plugins/fontawesome-free/css/all.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/plugins/icheck-bootstrap/icheck-bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/dist/css/adminlte.min.css') }}">
@@ -105,14 +105,14 @@
 
     @if (session('success'))
         <script>
-            $(function () {
+            $(function() {
                 toastr.success('{{ session('success') }}', 'Success');
             });
         </script>
     @endif
     @if (session('error'))
         <script>
-            $(function () {
+            $(function() {
                 toastr.error('{{ session('error') }}', 'Error');
             });
         </script>
