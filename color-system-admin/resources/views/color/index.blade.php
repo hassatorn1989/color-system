@@ -105,7 +105,7 @@
                     @csrf
                     <div class="modal-body">
                         <div class="form-group">
-                            <label for="groupColorName">Group Name</label>
+                            <label for="groupColorName">Group Name <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="groupColorName" name="groupColorName"
                                 placeholder="Enter group color name">
                         </div>

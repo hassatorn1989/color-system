@@ -119,16 +119,16 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form id="form" method="POST" data-id="" enctype="multipart/form-data">
+                <form id="form" method="POST" data-id="" enctype="multipart/form-data" action="">
                     @csrf
                     <div class="modal-body">
                         <div class="form-group">
-                            <label for="name">Pattern Name</label>
+                            <label for="name">Pattern Name <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="name" name="name"
                                 placeholder="Enter pattern name">
                         </div>
                         <div class="form-group">
-                            <label for="file">Pattern File (SVG)</label>
+                            <label for="file">Pattern File (SVG) <span class="text-danger">*</span></label>
                             <input name="file" id="file" type="file" class="dropify"
                                 data-allowed-file-extensions="svg" accept="image/svg+xml" />
                         </div>
