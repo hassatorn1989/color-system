@@ -28,6 +28,49 @@
         @include('components.sidebar')
         @yield('content')
         @yield('modal')
+
+        <form action="{{ route('change.password.update') }}" method="post" id="form_change_password">
+            <div class="modal fade" id="modal-change-password" tabindex="-1" data-keyboard="false"
+                data-backdrop="static">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        @csrf
+                        <div class="modal-header">
+                            <h5 class="modal-title">Change Password</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label class="form-label" for="current_password">Current Password <span
+                                        class="text-danger">*</span></label>
+                                <input id="current_password" type="password" name="current_password"
+                                    class="form-control" placeholder="Current Password">
+                            </div>
+                            <div class="form-group password-field">
+                                <label class="form-label" for="new_password">New Password <span
+                                        class="text-danger">*</span></label>
+                                <input id="new_password" type="password" name="new_password" class="form-control mb-2"
+                                    placeholder="New Password">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="confirm_password">Confirm Password <span
+                                        class="text-danger">*</span></label>
+                                <input id="confirm_password" type="password" name="confirm_password"
+                                    class="form-control mb-2" placeholder="Confirm New Password">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary" id="btn_save_chang_password"><i
+                                    class="fas fa-save"></i> Save</button>
+                            <button type="button" class="btn btn-danger" data-dismiss="modal"> <i
+                                    class="fas fa-times-circle"></i> Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
         @include('components.footer')
     </div>
     <!-- jQuery -->
@@ -47,26 +90,15 @@
     <!-- Bootstrap 4 -->
     <script src="{{ asset('assets/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('assets/plugins/sweetalert2/sweetalert2.all.min.js') }}"></script>
-    <!-- ChartJS -->
-    {{-- <script src="{{ asset('assets/plugins/chart.js/Chart.min.js') }}"></script> --}}
-    <!-- Sparkline -->
-    {{-- <script src="{{ asset('assets/plugins/sparklines/sparkline.js') }}"></script> --}}
-    <!-- JQVMap -->
-    {{-- <script src="{{ asset('assets/plugins/jqvmap/jquery.vmap.min.js') }}"></script> --}}
-    {{-- <script src="{{ asset('assets/plugins/jqvmap/maps/jquery.vmap.usa.js') }}"></script> --}}
-    <!-- jQuery Knob Chart -->
-    {{-- <script src="{{ asset('assets/plugins/jquery-knob/jquery.knob.min.js') }}"></script> --}}
-    <!-- daterangepicker -->
-    {{-- <script src="{{ asset('assets/plugins/moment/moment.min.js') }}"></script> --}}
-    {{-- <script src="{{ asset('assets/plugins/daterangepicker/daterangepicker.js') }}"></script> --}}
-    <!-- Tempusdominus Bootstrap 4 -->
-    {{-- <script src="{{ asset('assets/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js') }}"></script> --}}
-    <!-- Summernote -->
-    {{-- <script src="{{ asset('assets/plugins/summernote/summernote-bs4.min.js') }}"></script> --}}
-    <!-- overlayScrollbars -->
-    {{-- <script src="{{ asset('assets/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js') }}"></script> --}}
-    <!-- AdminLTE App -->
     <script src="{{ asset('assets/dist/js/adminlte.js') }}"></script>
+    <script>
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+    </script>
+    <script src="{{ asset('assets/app/change_password.js?q=' . time()) }}"></script>
     @stack('js')
 </body>
 

@@ -25,7 +25,6 @@ class ColorController extends Controller
      */
     public function create(Request $request)
     {
-        // dd($request->all());
         DB::beginTransaction();
         try {
 
@@ -38,16 +37,16 @@ class ColorController extends Controller
             $groupColor->created_at = now();
             $groupColor->updated_at = now();
             $groupColor->save();
-            
-            
+
+
             foreach ($request->color as $key => $value) {
                 $color = new Color();
                 $color->group_color_id = $groupColor->id;
                 $color->priority = $key + 1;
                 $color->color = $value;
                 $color->is_active = true;
-                $color->created_by = Auth::user()->name ?? 'System';
-                $color->updated_by = Auth::user()->name ?? 'System';
+                $color->created_by = Auth::user()->username ?? 'System';
+                $color->updated_by = Auth::user()->username ?? 'System';
                 $color->created_at = now();
                 $color->updated_at = now();
                 $color->save();
@@ -73,7 +72,7 @@ class ColorController extends Controller
      */
     public function show()
     {
-        
+
     }
 
     /**
@@ -106,15 +105,16 @@ class ColorController extends Controller
             foreach ($oldColors as $oldColor) {
                 $oldColor->delete();
             }
-            
+
             foreach ($request->color as $key => $value) {
+                // dd($oldColors[$key]->created_by);
                 $color = new Color();
                 $color->group_color_id = $groupColor->id;
                 $color->priority = $key + 1;
                 $color->color = $value;
                 $color->is_active = true;
-                $color->created_by = Auth::user()->name ?? 'System';
-                $color->updated_by = Auth::user()->name ?? 'System';
+                $color->created_by = $oldColors[$key]->created_by;
+                $color->updated_by = Auth::user()->username;
                 $color->created_at = now();
                 $color->updated_at = now();
                 $color->save();
