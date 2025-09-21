@@ -3,19 +3,23 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ColorController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ChangePasswordController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PatternController;
 use App\Http\Controllers\UserController;
 
 // auth routes
-Route::get('/login', [AuthController::class, 'index'])->name('login');
+Route::get('/', [AuthController::class, 'index'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('auth.login');
 
 
 Route::middleware(['auth'])->group(function () {
     // dashboard
-    Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
 
+    // change password
+    Route::post('/change-password', [ChangePasswordController::class, 'update'])->name('change.password.update');
+    Route::post('/check-current-password', [ChangePasswordController::class, 'checkCurrentPassword'])->name('check.current.password');
 
     // group prefix color
     Route::prefix('color')->group(function () {

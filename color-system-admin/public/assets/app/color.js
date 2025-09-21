@@ -50,7 +50,6 @@ function editData(id) {
         type: "GET",
         success: function (response) {
             if (response.status) {
-                console.log(response);
                 $(".modal-title").text("Edit Color");
                 $("button[type=submit] .btn-text").text("Update");
                 $("#form")[0].reset();
