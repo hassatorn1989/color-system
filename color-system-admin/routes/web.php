@@ -5,6 +5,7 @@ use App\Http\Controllers\ColorController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PatternController;
+use App\Http\Controllers\UserController;
 
 // auth routes
 Route::get('/login', [AuthController::class, 'index'])->name('login');
@@ -33,6 +34,15 @@ Route::middleware(['auth'])->group(function () {
         Route::get('edit/{id}', [PatternController::class, 'edit'])->name('pattern.edit');
         Route::post('update/{id}', [PatternController::class, 'update'])->name('pattern.update');
         Route::post('destroy/{id}', [PatternController::class, 'destroy'])->name('pattern.destroy');
+    });
+
+    Route::prefix('user')->group(function () {
+        Route::get('/', [UserController::class, 'index'])->name('user.index');
+        Route::post('create', [UserController::class, 'create'])->name('user.create');
+        Route::post('show', [UserController::class,'show'])->name('user.show');
+        Route::get('edit/{id}', [UserController::class,'edit'])->name('user.edit');
+        Route::post('update/{id}', [UserController::class, 'update'])->name('user.update');
+        Route::post('destroy/{id}', [UserController::class, 'destroy'])->name('user.destroy');
     });
 
     // logout

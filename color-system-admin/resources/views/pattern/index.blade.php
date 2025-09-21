@@ -4,13 +4,18 @@
     <link rel="stylesheet" href="{{ asset('assets/plugins/dropify/dropify.css') }}">
     <style>
         .dropify-wrapper .dropify-message span.file-icon::before {
-            content: "\f093"; /* fa-upload Unicode for FA5 solid */
-            font-family: "Font Awesome 5 Free"; /* FA5 */
-            font-weight: 900; /* solid icons */
+            content: "\f093";
+            /* fa-upload Unicode for FA5 solid */
+            font-family: "Font Awesome 5 Free";
+            /* FA5 */
+            font-weight: 900;
+            /* solid icons */
         }
-        .file-icon p{
+
+        .file-icon p {
             font-size: 20px;
         }
+
         .dropify-wrapper {
             border: 2px dashed #d2d6de;
             border-radius: 10px;
@@ -47,17 +52,15 @@
                         <div class="card">
                             <!-- /.card-header -->
                             <div class="card-header">
-                                <div class=" mt-3 d-flex justify-content-between">
-                                    <div>
-                                        <h4>Palette Generator</h4>
-                                    </div>
+                                <h3 class="card-title">Palette Generator</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="d-flex justify-content-end mb-3">
                                     <button onclick="addData()" id="addButton" class="btn btn-primary">
                                         <i class="fas fa-plus-circle"></i>&nbsp;
                                         Add New
                                     </button>
                                 </div>
-                            </div>
-                            <div class="card-body">
                                 <div class="row">
                                     @foreach ($patterns as $pattern)
                                         <div class="col-3 mb-3">
@@ -69,7 +72,8 @@
                                                     <div class="row g-2">
                                                         {{-- @foreach ($groupColor->getColors as $item) --}}
                                                         <div class="col-4">
-                                                            <img src="{{ asset('storage/' . $pattern->file_path) }}" alt="" width="150" height="150">
+                                                            <img src="{{ asset('storage/' . $pattern->file_path) }}"
+                                                                alt="" width="150" height="150">
                                                         </div>
                                                         {{-- @endforeach --}}
                                                     </div>
@@ -111,11 +115,13 @@
                     <div class="modal-body">
                         <div class="form-group">
                             <label for="name">Pattern Name</label>
-                            <input type="text" class="form-control" id="name" name="name" placeholder="Enter pattern name">
+                            <input type="text" class="form-control" id="name" name="name"
+                                placeholder="Enter pattern name">
                         </div>
                         <div class="form-group">
                             <label for="file">Pattern File (SVG)</label>
-                            <input name="file" id="file" type="file" class="dropify" data-allowed-file-extensions="svg" accept="image/svg+xml" />
+                            <input name="file" id="file" type="file" class="dropify"
+                                data-allowed-file-extensions="svg" accept="image/svg+xml" />
                         </div>
                     </div>
                     <div class="modal-footer justify-content-end">

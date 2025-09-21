@@ -1,4 +1,13 @@
-var drEvent = $(".dropify").dropify();
+var drOptions = {
+    // สามารถใส่ options ถ้าต้องการ
+    messages: {
+        default: "Drag and drop a file here or click",
+        replace: "Drag and drop or click to replace",
+        remove: "Remove",
+        error: "Ooops, something wrong appended.",
+    },
+};
+var drEvent = $(".dropify").dropify(drOptions);
 drEvent.on("change", function (event, element) {
     var input = event.target;
     if (input.files && input.files[0]) {
@@ -33,6 +42,63 @@ drEvent.on("change", function (event, element) {
     }
 });
 
+$.validator.addMethod(
+    "filesize",
+    function (value, element, param) {
+        // param in bytes
+        if (element.files.length === 0) return true; // let required handle empty
+        return element.files[0].size <= param;
+    },
+    "File size must be less than {0} bytes."
+);
+
+// Optional: more user-friendly filesize message formatter
+function bytesToMB(bytes) {
+    return (bytes / 1024 / 1024).toFixed(2) + " MB";
+}
+
+$(document).ready(function () {
+    $("#form").validate({
+        ignore: ".ignore",
+        rules: {
+            name: {
+                required: true,
+            },
+            file: {
+                required: function() {
+                    if ($("#form").attr("action").includes("create")) {
+                        return true;
+                    }
+                    return false;
+                },
+                extension: "png|jpg|jpeg|svg",
+                filesize: 2 * 1024 * 1024, // 2 MB in bytes
+            },
+        },
+        errorElement: "span",
+        errorPlacement: function (error, element) {
+            error.addClass("invalid-feedback");
+            element.closest(".form-group").append(error);
+        },
+        highlight: function (element, errorClass, validClass) {
+            $(element).addClass("is-invalid");
+        },
+        unhighlight: function (element, errorClass, validClass) {
+            $(element).removeClass("is-invalid");
+        },
+        submitHandler: function (form) {
+            $("#form button[type=submit]")
+                .empty()
+                .html(
+                    '<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span> ' +
+                        '<span class="">Saving...</span>'
+                )
+                .attr("disabled", true);
+            form.submit();
+        },
+    });
+});
+
 function addData() {
     $("#modal-default").modal("show");
     $(".modal-title").text("Add Pattern");
@@ -61,7 +127,7 @@ function deleteData(id) {
                 data: {
                     _token: $("meta[name=csrf-token]").attr("content"),
                 },
-                success: function (response) {  
+                success: function (response) {
                     if (response.status) {
                         Swal.fire(
                             "Deleted!",

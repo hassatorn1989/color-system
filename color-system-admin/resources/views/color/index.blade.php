@@ -31,18 +31,15 @@
                         <div class="card">
                             <!-- /.card-header -->
                             <div class="card-header">
-                                <div class=" mt-3 d-flex justify-content-between">
-                                    <div>
-                                        <h4>Color Palette Generator</h4>
-                                    </div>
+                                <h3 class="card-title">User Management</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="d-flex justify-content-end mb-3">
                                     <button onclick="addData()" id="addButton" class="btn btn-primary">
-                                        <i class="fas fa-plus-circle"></i>&nbsp; 
+                                        <i class="fas fa-plus-circle"></i>&nbsp;
                                         Add New
                                     </button>
                                 </div>
-                            </div>
-                            <div class="card-body">
-                                
                                 <div class="row">
                                     @foreach ($groupColors as $groupColor)
                                         <div class="col-md-3 mb-3">
@@ -123,8 +120,9 @@
                             <i class="fas fa-save"></i>
                             <span class="btn-text">Save</span>
                         </button>
-                        <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fas fa-times"></i> Close</button>
-                        
+                        <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fas fa-times"></i>
+                            Close</button>
+
                     </div>
                 </form>
             </div>
