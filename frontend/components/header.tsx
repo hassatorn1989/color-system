@@ -33,17 +33,22 @@ export default function Header() {
     { name: "ติดต่อ", href: "/#contact", items: [] },
   ];
   return (
-    <header className="sticky top-0 z-50 flex items-center border-b justify-between p-4 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="h-16 sticky top-0 z-50 flex items-center border-b justify-between p-4 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container max-w-7xl  mx-auto flex items-center justify-between">
         <div className="flex items-center space-x-4">
-          <Link href="/" className="text-xl font-bold">
+          <Link 
+            href="/" 
+            className="text-xl font-bold bg-clip-text text-transparent"
+            style={{
+              backgroundImage: 'linear-gradient(to right, #ef4444, #f97316, #eab308, #22c55e, #3b82f6, #8b5cf6)'
+            }}
+          >
             Color System
           </Link>
           <NavigationMenu className="ml-6 hidden md:flex">
             <NavigationMenuList>
               {menu.map((item) => (
                 <NavigationMenuItem key={item.name}>
-                  <Link href={item.href} legacyBehavior passHref>
                     {item.items.length > 0 ? (
                       <NavigationMenuTrigger
                         className={
@@ -54,6 +59,7 @@ export default function Header() {
                       </NavigationMenuTrigger>
                     ) : (
                       <NavigationMenuLink
+                        href={item.href}
                         className={
                           navigationMenuTriggerStyle() + " bg-transparent"
                         }
@@ -61,7 +67,6 @@ export default function Header() {
                         {item.name}
                       </NavigationMenuLink>
                     )}
-                  </Link>
                   {item.items.length > 0 && (
                     <NavigationMenuContent>
                       <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
