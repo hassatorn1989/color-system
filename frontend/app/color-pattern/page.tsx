@@ -243,7 +243,7 @@ export default function Page() {
                 )}
               </AccordionContent>
             </AccordionItem>
-            <AccordionItem value="item-2">
+            <AccordionItem value="item-2" >
               <AccordionTrigger className="text-lg no-underline hover:no-underline">
                 <h3 className="font-semibold">Select Color</h3>
               </AccordionTrigger>

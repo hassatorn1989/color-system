@@ -4,7 +4,7 @@ import "./globals.css";
 import localFont from "next/font/local";
 import { ThemeProvider } from "@/components/theme-provider";
 import Header from "@/components/header";
-
+import Accessibility from "@/components/Accessibility";
 const notoSansThai = localFont({
   src: [
     {
@@ -42,6 +42,7 @@ export default function RootLayout({
           <main className="">
             {children}
           </main>
+          <Accessibility />
         </ThemeProvider>
       </body>
     </html>

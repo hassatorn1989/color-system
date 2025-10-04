@@ -14,15 +14,40 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
 model Pattern {
-  id        String   @id @default(uuid())
-  name      String
-  file_name String
-  file_path String
+  id         String    @id @default(uuid())
+  name       String
+  file_name  String
+  file_path  String
   created_by String
   updated_by String
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
   deleted_at DateTime?
+}
+
+model GroupColor {
+  id         String    @id @default(uuid())
+  name       String
+  is_active  Boolean   @default(true)
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+  deleted_at DateTime?
+
+  @@map("group_color")
+}
+
+model Color {
+  id             String    @id @default(uuid())
+  group_color_id String    
+  priority        Int
+  color          String
+  is_active      Boolean   @default(true)
+  created_by     String    
+  updated_by     String
+  created_at     DateTime  @default(now())
+  updated_at     DateTime  @updatedAt
+  deleted_at     DateTime?
+
+  @@map("color")
 }
