@@ -14,6 +14,7 @@ import {
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { ZoomOut, ZoomIn, RefreshCcw, X, Pyramid } from "lucide-react";
 import { useEffect, useState } from "react";
+import { RgbaColorPicker } from "react-colorful";
 import {
   Popover,
   PopoverContent,
@@ -21,6 +22,8 @@ import {
 } from "@/components/ui/popover";
 import { SvgComponents } from "./svg";
 import axios from "axios";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 interface Pattern {
   id: number;
   name: string;
@@ -31,6 +34,19 @@ interface Pattern {
 // import Overcast from "../assets/overcast.svg";
 export default function Page() {
   const [scale, setScale] = useState(1);
+  // Color picker state
+  const [foregroundColor, setForegroundColor] = useState({
+    r: 0,
+    g: 0,
+    b: 0,
+    a: 1,
+  });
+  const [backgroundColor, setBackgroundColor] = useState({
+    r: 255,
+    g: 255,
+    b: 255,
+    a: 1,
+  });
   const [svg, setSvg] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
@@ -114,15 +130,76 @@ export default function Page() {
         });
       });
   }
-
+  function handleExport() {
+    if (!svg) {
+      alert("Please select a pattern first.");
+      return;
+    };
+    
+    // Create a canvas element for the tiled pattern
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
+    if (!ctx) {
+      console.error("Could not get 2D context from canvas");
+      return;
+    }
+    
+    const width = 1000;
+    const height = 500;
+    canvas.width = width;
+    canvas.height = height;
+    
+    // Set background color
+    ctx.fillStyle = `rgba(${backgroundColor.r},${backgroundColor.g},${backgroundColor.b},${backgroundColor.a})`;
+    ctx.fillRect(0, 0, width, height);
+    
+    // Create colored SVG for the pattern tile
+    const coloredSvg = svg
+      .replace(/fill=".*?"/g, `fill="rgba(${foregroundColor.r},${foregroundColor.g},${foregroundColor.b},${foregroundColor.a})"`)
+      .replace(/stroke=".*?"/g, `stroke="rgba(${foregroundColor.r},${foregroundColor.g},${foregroundColor.b},${foregroundColor.a})"`)
+      .replace(
+        /<svg /,
+        `<svg `
+      );
+    
+    // Create an image from the SVG to draw on canvas
+    const img = new Image();
+    img.onload = () => {
+      // Calculate size for each pattern tile
+      const tileSize = 50;
+      
+      // Draw the pattern repeatedly to fill the canvas
+      for (let y = 0; y < height; y += tileSize) {
+        for (let x = 0; x < width; x += tileSize) {
+          ctx.drawImage(img, x, y, tileSize, tileSize);
+        }
+      }
+      
+      // Convert canvas to blob and download
+      canvas.toBlob((blob) => {
+        if (blob) {
+          const url = URL.createObjectURL(blob);
+          const link = document.createElement("a");
+          link.href = url;
+          link.download = "pattern.png";
+          link.click();
+          URL.revokeObjectURL(url);
+        }
+      }, 'image/png');
+    };
+    
+    // Create a data URL from the SVG
+    const svgBlob = new Blob([coloredSvg], { type: "image/svg+xml;charset=utf-8" });
+    img.src = URL.createObjectURL(svgBlob);
+  }
   return (
-    <div className="h-[calc(100vh-4rem)] w-full">
+    <div className="h-[calc(100vh-4rem)] w-full bg-white">
       <ResizablePanelGroup direction="horizontal">
         <ResizablePanel
           maxSize={30}
           minSize={20}
           defaultSize={20}
-          className="mt-4 p-4 flex justify-start"
+          className="mt-4 p-4 flex flex-col justify-between"
         >
           <Accordion
             type="single"
@@ -134,7 +211,7 @@ export default function Page() {
               <AccordionTrigger className="text-lg no-underline hover:no-underline">
                 <h3 className="font-semibold">Select a Pattern</h3>
               </AccordionTrigger>
-              <AccordionContent className="flex flex-col gap-4 text-balance">
+              <AccordionContent className="accessibility-content flex flex-col gap-4 text-balance">
                 <span className="font-semibold">File Format</span>
                 <div className="flex gap-4 justify-center">
                   <ToggleGroup
@@ -223,7 +300,18 @@ export default function Page() {
                     <span className="font-semibold">Preview</span>
                     <div className=" mt-2">
                       <Button
-                        onClick={() => setSvg(null)}
+                        onClick={() => {
+                          if (svg !== null) {
+                            setSvg(null);
+                            setBackgroundColor({
+                              r: 255,
+                              g: 255,
+                              b: 255,
+                              a: 1,
+                            });
+                            setForegroundColor({ r: 0, g: 0, b: 0, a: 1 });
+                          }
+                        }}
                         variant={"ghost"}
                         className="absolute top-0 right-2 rounded-full"
                       >
@@ -239,28 +327,114 @@ export default function Page() {
                         }}
                       />
                     </div>
+
+                    <div className="flex flex-col gap-4 mt-4">
+                      <div className="flex flex-col gap-2">
+                        <Label>foreground color</Label>
+                        {/* Color picker and RGBA value */}
+                        <div className="flex gap-2 items-center">
+                          {/* Color preview box */}
+                          <Popover>
+                            <PopoverTrigger asChild>
+                              <div
+                                style={{
+                                  minWidth: 32,
+                                  minHeight: 32,
+                                  borderRadius: 6,
+                                  border: "1px solid #ccc",
+                                  background: `rgba(${foregroundColor.r},${foregroundColor.g},${foregroundColor.b},${foregroundColor.a})`,
+                                  boxShadow: "0 0 2px #aaa",
+                                }}
+                              />
+                            </PopoverTrigger>
+                            <PopoverContent
+                              className="w-auto ml-5 mt-2"
+                              side="bottom"
+                            >
+                              <RgbaColorPicker
+                                color={foregroundColor}
+                                onChange={setForegroundColor}
+                              />
+                            </PopoverContent>
+                          </Popover>
+                          {/* RGBA value display */}
+                          <Input
+                            value={`rgba(${foregroundColor.r}, ${foregroundColor.g}, ${foregroundColor.b}, ${foregroundColor.a})`}
+                            readOnly
+                            className="w-[calc(100%-40px)] font-mono"
+                          />
+                          {/* Clear button */}
+                          <Button
+                            variant="outline"
+                            onClick={() =>
+                              setForegroundColor({ r: 0, g: 0, b: 0, a: 1 })
+                            }
+                            className="ml-2"
+                          >
+                            Clear
+                          </Button>
+                        </div>
+                      </div>
+
+                      <div className="flex flex-col gap-2">
+                        <Label>background color</Label>
+                        {/* Color picker and RGBA value */}
+                        <div className="flex gap-2 items-center">
+                          {/* Color preview box */}
+                          <Popover>
+                            <PopoverTrigger asChild>
+                              <div
+                                style={{
+                                  minWidth: 32,
+                                  minHeight: 32,
+                                  borderRadius: 6,
+                                  border: "1px solid #ccc",
+                                  background: `rgba(${backgroundColor.r},${backgroundColor.g},${backgroundColor.b},${backgroundColor.a})`,
+                                  boxShadow: "0 0 2px #aaa",
+                                }}
+                              />
+                            </PopoverTrigger>
+                            <PopoverContent
+                              className="w-auto ml-5 mt-2"
+                              side="bottom"
+                            >
+                              <RgbaColorPicker
+                                color={backgroundColor}
+                                onChange={setBackgroundColor}
+                              />
+                            </PopoverContent>
+                          </Popover>
+                          {/* RGBA value display */}
+                          <Input
+                            value={`rgba(${backgroundColor.r}, ${backgroundColor.g}, ${backgroundColor.b}, ${backgroundColor.a})`}
+                            readOnly
+                            className="w-[calc(100%-40px)] font-mono"
+                          />
+                          {/* Clear button */}
+                          <Button
+                            variant="outline"
+                            onClick={() =>
+                              setBackgroundColor({
+                                r: 255,
+                                g: 255,
+                                b: 255,
+                                a: 1,
+                              })
+                            }
+                            className="ml-2"
+                          >
+                            Clear
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 )}
-              </AccordionContent>
-            </AccordionItem>
-            <AccordionItem value="item-2" >
-              <AccordionTrigger className="text-lg no-underline hover:no-underline">
-                <h3 className="font-semibold">Select Color</h3>
-              </AccordionTrigger>
-              <AccordionContent className="flex flex-col gap-4 text-balance">
-                <p>
-                  We offer worldwide shipping through trusted courier partners.
-                  Standard delivery takes 3-5 business days, while express
-                  shipping ensures delivery within 1-2 business days.
-                </p>
-                <p>
-                  All orders are carefully packaged and fully insured. Track
-                  your shipment in real-time through our dedicated tracking
-                  portal.
-                </p>
+
               </AccordionContent>
             </AccordionItem>
           </Accordion>
+          <Button onClick={handleExport} className=" w-full">Export</Button>
         </ResizablePanel>
         <ResizableHandle withHandle />
         <ResizablePanel className=" border shadow shadow-violet-300">
@@ -270,7 +444,7 @@ export default function Page() {
               className="
                 relative
                 h-full hljs
-                bg-[radial-gradient(circle,_#d0d4d9_1px,_#f5f3ff_1px)]
+                bg-[radial-gradient(circle,_#d0d4d9_1px,_#F9FAFB_1px)]
                 [background-size:20px_20px]
                 overflow-hidden p-16 select-none"
               style={{
@@ -290,7 +464,11 @@ export default function Page() {
                     transition: isDragging ? "none" : "transform 0.2s ease",
                   }}
                 >
-                  <SvgComponents svg={svg} />
+                  <SvgComponents
+                    svg={svg}
+                    foregroundColor={foregroundColor}
+                    backgroundColor={backgroundColor}
+                  />
                 </div>
               )}
             </div>

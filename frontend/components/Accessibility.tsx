@@ -144,8 +144,9 @@ const Accessibility = () => {
                      settings.fontSize === 'extra-large' ? '1.5' : '1'
     root.style.setProperty('--accessibility-font-scale', fontScale)
     
-    // Content scaling
+    // Content scaling - use zoom instead of transform for browser-like zoom effect
     root.style.setProperty('--accessibility-content-scale', `${settings.contentScaling / 100}`)
+    root.style.setProperty('--accessibility-zoom', `${settings.contentScaling}%`)
     
     // Line height and letter spacing
     root.style.setProperty('--accessibility-line-height', settings.lineHeight.toString())
@@ -266,10 +267,10 @@ const Accessibility = () => {
           }}
         >
           <Card 
-            className={`shadow-2xl border-2 fixed right-8 top-18 bg-background/95 max-w-[25vw] min-w-[25vw]`}
+            className={`shadow-2xl border-2 fixed right-8 top-18 bg-white max-w-[25vw] min-w-[25vw]`}
           >
-            <div className=" w-full max-w-md max-h-[72vh] overflow-auto ">
-              <CardHeader className="pb-4">
+            <div className=" w-full max-h-[72vh] overflow-auto accessibility-panel">
+              <CardHeader className="pb-4 accessibility-content">
                 <div className="flex items-center justify-between">
                   <CardTitle className="flex items-center gap-2">
                     <AccessibilityIcon className="h-5 w-5" />
@@ -287,7 +288,7 @@ const Accessibility = () => {
                 </div>
               </CardHeader>
               
-              <CardContent className="space-y-6">
+              <CardContent className="space-y-6 accessibility-content">
                 {/* Font Size */}
                 <div className="space-y-3">
                   <Label className="text-sm font-medium flex items-center gap-2">
@@ -578,16 +579,7 @@ const Accessibility = () => {
       )}
 
       {/* Enhanced Global Accessibility Styles */}
-      <style jsx global>{`
-        /* Smooth transitions for all accessibility changes */
-        * {
-          transition: font-size 0.3s ease, 
-                     letter-spacing 0.3s ease, 
-                     line-height 0.3s ease,
-                     filter 0.3s ease,
-                     transform 0.3s ease !important;
-        }
-        
+      <style jsx global>{`        
         /* Reduce motion when enabled */
         .reduce-motion * {
           animation-duration: 0.01ms !important;
@@ -665,13 +657,24 @@ const Accessibility = () => {
           letter-spacing: var(--accessibility-letter-spacing, 0) !important;
         }
         
-        /* Apply content scaling to main content areas, not body */
-        main, 
-        [role="main"],
-        .main-content {
-          transform: scale(var(--accessibility-content-scale, 1));
-          transform-origin: top left;
-          transition: transform 0.3s ease;
+        /* Apply content scaling to only the content wrapper, not the main container or background */
+        .accessibility-content {
+          zoom: var(--accessibility-zoom, 100%);
+          -ms-zoom: var(--accessibility-zoom, 100%);
+          -webkit-zoom: var(--accessibility-zoom, 100%);
+          transition: all 0.3s ease;
+          height: 100%;
+          width: 100%;
+        }
+          
+        
+        /* Firefox support with transform instead of zoom */
+        @supports (-moz-appearance: none) {
+          .accessibility-content {
+            transform: scale(var(--accessibility-content-scale, 1));
+            transform-origin: top left;
+            transition: transform 0.3s ease;
+          }
         }
         
         /* Smooth panel animations */

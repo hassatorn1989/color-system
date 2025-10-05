@@ -33,9 +33,9 @@ export default function Header() {
     { name: "ติดต่อ", href: "/#contact", items: [] },
   ];
   return (
-    <header className="h-16 sticky top-0 z-50 flex items-center border-b justify-between p-4 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container max-w-7xl  mx-auto flex items-center justify-between">
-        <div className="flex items-center space-x-4">
+    <header className={"h-16 sticky top-0 z-50 flex items-center border-b justify-between p-4 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60"}>
+      <div className="accessibility-content container max-w-7xl  mx-auto flex items-center justify-between">
+        <div className=" flex items-center space-x-4">
           <Link 
             href="/" 
             className="text-xl font-bold bg-clip-text text-transparent"

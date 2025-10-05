@@ -167,7 +167,7 @@ export default function ContrastChecker() {
   );
 
   return (
-    <Card className="w-full">
+    <Card className="w-full accessibility-content">
       <CardHeader>
         <CardTitle>Contrast Checker (WCAG)</CardTitle>
       </CardHeader>
