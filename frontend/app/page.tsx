@@ -9,7 +9,7 @@ export default function Home() {
         <div className="absolute top-10 left-10 w-72 h-72 bg-purple-300 dark:bg-purple-600 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob"></div>
         <div className="absolute top-0 right-4 w-72 h-72 bg-yellow-300 dark:bg-yellow-600 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-2000"></div>
         <div className="absolute -bottom-8 left-20 w-72 h-72 bg-pink-300 dark:bg-pink-600 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-4000"></div>
-        <div className="container mx-auto text-center relative z-10">
+        <div className="accessibility-content container flex flex-col items-center justify-center text-center relative z-10">
           <h1 className="text-4xl font-bold mb-4">
             Welcome to MyApp
           </h1>
@@ -26,7 +26,7 @@ export default function Home() {
           </div>
         </div>
       </section>
-      <section className="about py-16">
+      <section className="about py-16 accessibility-content">
         <div className="container mx-auto text-center">
           <h2 className="text-3xl font-semibold mb-4">About Us</h2>
           <p className="text-md mb-6 max-w-2xl mx-auto">
