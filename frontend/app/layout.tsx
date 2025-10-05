@@ -37,7 +37,7 @@ export default function RootLayout({
           <Header />
           {/* <main className="container mx-auto max-w-7xl top-0"> */}
           <main className="bg-black/5 min-h-[calc(100vh-64px)] overflow-hidden flex  justify-center ">
-            <div>
+            <div className="w-full">
               {children}
               <Accessibility />
             </div>
