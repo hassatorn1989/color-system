@@ -1,135 +1,107 @@
-// app/components/Header.tsx
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
+import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-  navigationMenuTriggerStyle,
-} from "@/components/ui/navigation-menu";
-import { Menu } from "lucide-react";
-import { ModeToggle } from "./mode-toggle";
 
-export default function Header() {
-  const menu = [
-    { name: "หน้าหลัก", href: "/", items: [] },
-    {
-      name: "บริการ",
-      href: "#",
-      items: [
-        { name: "บริการ 1", href: "/services/service1" },
-        { name: "บริการ 2", href: "/services/service2" },
-        { name: "บริการ 3", href: "/services/service3" },
-      ],
-    },
-    { name: "เกี่ยวกับเรา", href: "/#about", items: [] },
-    { name: "ผลงาน", href: "/#portfolio", items: [] },
-    { name: "ติดต่อ", href: "/#contact", items: [] },
-  ];
+export default function Page() {
+  const [isOpen, setIsOpen] = useState(false);
+
   return (
-    <header className={"h-16 sticky top-0 z-50 flex items-center border-b justify-between p-4 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60"}>
-      <div className="accessibility-content container max-w-7xl  mx-auto flex items-center justify-between">
-        <div className=" flex items-center space-x-4">
-          <Link 
-            href="/" 
-            className="text-xl font-bold bg-clip-text text-transparent"
-            style={{
-              backgroundImage: 'linear-gradient(to right, #ef4444, #f97316, #eab308, #22c55e, #3b82f6, #8b5cf6)'
-            }}
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-md border-b border-border">
+      <div className="max-w-7xl mx-auto px-4 sm:px-0 lg:px-0">
+        <div className="flex justify-between items-center h-20">
+          {/* Logo */}
+          <div className="flex-shrink-0">
+            <Link href="/" className="text-2xl font-bold text-primary">
+              <span className="bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
+                ChromaLab
+              </span>
+            </Link>
+          </div>
+
+          {/* Desktop Menu - Updated menu text to Thai */}
+          <div className="hidden md:flex gap-8">
+            <Link
+              href="/color-wheel"
+              className="text-foreground/70 hover:text-foreground transition font-medium"
+            >
+              วงจรสี
+            </Link>
+            <Link
+              href="/color-patterns"
+              className="text-foreground/70 hover:text-foreground transition font-medium"
+            >
+              แบบรูปสี
+            </Link>
+            <Link
+              href="/contrast-checker"
+              className="text-foreground/70 hover:text-foreground transition font-medium"
+            >
+              ตรวจความคม
+            </Link>
+            <Link
+              href="/about"
+              className="text-foreground/70 hover:text-foreground transition font-medium"
+            >
+              เกี่ยวกับเรา
+            </Link>
+            <Link
+              href="/contact"
+              className="text-foreground/70 hover:text-foreground transition font-medium"
+            >
+              ติดต่อเรา
+            </Link>
+          </div>
+
+          {/* Mobile Menu Button */}
+          <Button
+            variant="ghost"
+            size="icon"
+            className="md:hidden"
+            onClick={() => setIsOpen(!isOpen)}
           >
-            Color System
-          </Link>
-          <NavigationMenu className="ml-6 hidden md:flex">
-            <NavigationMenuList>
-              {menu.map((item) => (
-                <NavigationMenuItem key={item.name}>
-                    {item.items.length > 0 ? (
-                      <NavigationMenuTrigger
-                        className={
-                          navigationMenuTriggerStyle() + " bg-transparent"
-                        }
-                      >
-                        {item.name}
-                      </NavigationMenuTrigger>
-                    ) : (
-                      <NavigationMenuLink
-                        href={item.href}
-                        className={
-                          navigationMenuTriggerStyle() + " bg-transparent"
-                        }
-                      >
-                        {item.name}
-                      </NavigationMenuLink>
-                    )}
-                  {item.items.length > 0 && (
-                    <NavigationMenuContent>
-                      <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
-                        {item.items.map((subItem) => (
-                          <li key={subItem.name}>
-                            <Link
-                              href={subItem.href}
-                              className="block py-2 text-gray-700 hover:text-gray-900"
-                            >
-                              {subItem.name}
-                            </Link>
-                          </li>
-                        ))}
-                      </ul>
-                    </NavigationMenuContent>
-                  )}
-                </NavigationMenuItem>
-              ))}
-            </NavigationMenuList>
-          </NavigationMenu>
+            {isOpen ? <X size={24} /> : <Menu size={24} />}
+          </Button>
         </div>
 
-        <div className="flex items-center space-x-2">
-          <ModeToggle />
-          <Sheet>
-            <SheetTrigger asChild>
-              <Button variant="ghost" className="md:hidden">
-                <Menu className="w-6 h-6" />
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="right" className="p-4">
-              <NavigationMenu>
-                <NavigationMenuList>
-                  <NavigationMenuItem>
-                    <Link
-                      href="/about"
-                      className="block py-2 text-gray-700 hover:text-gray-900"
-                    >
-                      About
-                    </Link>
-                  </NavigationMenuItem>
-                  <NavigationMenuItem>
-                    <Link
-                      href="/services"
-                      className="block py-2 text-gray-700 hover:text-gray-900"
-                    >
-                      Services
-                    </Link>
-                  </NavigationMenuItem>
-                  <NavigationMenuItem>
-                    <Link
-                      href="/contact"
-                      className="block py-2 text-gray-700 hover:text-gray-900"
-                    >
-                      Contact Edit ddd  hgjghkhk jykyiooou
-                    </Link>
-                  </NavigationMenuItem>
-                </NavigationMenuList>
-              </NavigationMenu>
-            </SheetContent>
-          </Sheet>
-        </div>
+        {/* Mobile Menu - Updated menu text to Thai */}
+        {isOpen && (
+          <div className="md:hidden pb-4 space-y-2">
+            <Link
+              href="/color-wheel"
+              className="block px-4 py-2 text-foreground/70 hover:text-foreground hover:bg-muted rounded-md transition"
+            >
+              วงจรสี
+            </Link>
+            <Link
+              href="/color-patterns"
+              className="block px-4 py-2 text-foreground/70 hover:text-foreground hover:bg-muted rounded-md transition"
+            >
+              แบบรูปสี
+            </Link>
+            <Link
+              href="/contrast-checker"
+              className="block px-4 py-2 text-foreground/70 hover:text-foreground hover:bg-muted rounded-md transition"
+            >
+              ตรวจความคม
+            </Link>
+            <Link
+              href="/about"
+              className="block px-4 py-2 text-foreground/70 hover:text-foreground hover:bg-muted rounded-md transition"
+            >
+              เกี่ยวกับเรา
+            </Link>
+            <Link
+              href="/contact"
+              className="block px-4 py-2 text-foreground/70 hover:text-foreground hover:bg-muted rounded-md transition"
+            >
+              ติดต่อเรา
+            </Link>
+          </div>
+        )}
       </div>
-    </header>
+    </nav>
   );
 }

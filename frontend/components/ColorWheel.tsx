@@ -1,17 +1,27 @@
 "use client";
 import React, { useState, useRef, useEffect } from "react";
 import { ColorPattern } from "./ColorPattern";
+import { Card } from "./ui/card";
+import { Label } from "./ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
+import { GroupColor } from "@/lib/generated/prisma/wasm";
 
 interface ColorWheelHarmonyProps {
   baseColor: string[];
   onSendData: (data: Array<number>) => void;
   harmonyType: string;
+  groupColor: GroupColor[];
+  groupColorId: string;
+  selectColor: (id: string) => void;
 }
 
 const ColorHarmonyWheel = ({
   baseColor,
   onSendData,
   harmonyType,
+  groupColor,
+  groupColorId,
+  selectColor,
 }: ColorWheelHarmonyProps) => {
   const [baseHue, setBaseHue] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
@@ -198,12 +208,101 @@ const ColorHarmonyWheel = ({
   if (!isMounted) return null;
 
   return (
-  <div className="flex flex-col gap-6 sm:flex-row sm:gap-8 md:flex-row md:gap-12">
-      <div className="w-full">
-        {renderColorWheel()}
+    // <div className="flex flex-col gap-6 sm:flex-row sm:gap-8 md:flex-row md:gap-12">
+    //     <div className="w-full">
+    //       {renderColorWheel()}
+    //     </div>
+    //     <ColorPattern harmonyColors={harmonyColors} baseColor={baseColor} harmonyType={harmonyType} />
+    //   </div>mb-6
+    <>
+      <div className="grid lg:grid-cols-2 gap-6 mt-8">
+        {/* Interactive Wheel */}
+        <div className="flex flex-col ">
+          <Card className="p-8 bg-card border-border w-full">
+           <Select
+              value={groupColorId}
+              onValueChange={(value) => selectColor(value)}
+              className="w-full mb-6"
+            >
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="เลือกชุดสีพื้นฐาน" />
+              </SelectTrigger>
+              <SelectContent>
+                {groupColor.map((groupColor, index) => (
+                  <SelectItem key={index} value={groupColor.id}>
+                    {groupColor.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <div className="flex justify-center mb-8">{renderColorWheel()}</div>
+
+            {/* Slider for wheel interaction */}
+            {/* <div className="space-y-3">
+              <Label className="text-foreground font-medium">หมุนวงจร</Label>
+              <input
+                type="range"
+                min="0"
+                max="330"
+                step="30"
+                value={selectedDegree}
+                onChange={(e) => setSelectedDegree(Number(e.target.value))}
+                className="w-full h-2 bg-border rounded-lg appearance-none cursor-pointer"
+                style={{
+                  background: `linear-gradient(to right, #EF4444 0%, #F97316 8%, #FB923C 16%, #FBBF24 25%, #BFDBFE 33%, #4ADE80 41%, #22D3EE 50%, #3B82F6 58%, #A855F7 66%, #EC4899 75%, #F472B6 83%, #FB7185 91%, #EF4444 100%)`,
+                }}
+              />
+              <div className="flex justify-between text-xs text-foreground/60">
+                <span>0°</span>
+                <span>180°</span>
+                <span>330°</span>
+              </div>
+            </div> */}
+          </Card>
+        </div>
+
+        {/* Color Information */}
+        <div className="space-y-6">
+          {/* Selected Color Display */}
+          <Card className="overflow-hidden border-border">
+            <ColorPattern
+              harmonyColors={harmonyColors}
+              baseColor={baseColor}
+              harmonyType={harmonyType}
+            />
+          </Card>
+
+          {/* Color Theory Info */}
+          <Card className="p-6 bg-card border-border">
+            <h4 className="text-lg font-semibold text-foreground mb-3">
+              พื้นฐานทฤษฎีสี
+            </h4>
+            <ul className="space-y-2 text-foreground/70 text-sm">
+              <li className="flex gap-2">
+                <span className="text-primary font-bold">•</span>
+                <span>
+                  <strong>สีหลัก:</strong> สีแดง สีเหลือง สีน้ำเงิน -
+                  ไม่สามารถผสมจากสีอื่น
+                </span>
+              </li>
+              <li className="flex gap-2">
+                <span className="text-accent font-bold">•</span>
+                <span>
+                  <strong>สีรอง:</strong> สีส้ม สีเขียว สีม่วง -
+                  ทำจากผสมสีหลักสองสี
+                </span>
+              </li>
+              <li className="flex gap-2">
+                <span className="text-secondary font-bold">•</span>
+                <span>
+                  <strong>สีทุติยภูมิ:</strong> ทำจากผสมสีหลักและสีรอง
+                </span>
+              </li>
+            </ul>
+          </Card>
+        </div>
       </div>
-      <ColorPattern harmonyColors={harmonyColors} baseColor={baseColor} harmonyType={harmonyType} />
-    </div>
+    </>
   );
 };
 

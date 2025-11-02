@@ -5,6 +5,8 @@ import localFont from "next/font/local";
 import { ThemeProvider } from "@/components/theme-provider";
 import Header from "@/components/header";
 import Accessibility from "@/components/Accessibility";
+import Footer from "@/components/footer";
+import AccessibilityWidget from "@/components/AccessibilityWidget";
 const notoSansThai = localFont({
   src: [
     {
@@ -35,13 +37,9 @@ export default function RootLayout({
       <body className={`${notoSansThai.className} antialiase`}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <Header />
-          {/* <main className="container mx-auto max-w-7xl top-0"> */}
-          <main className="bg-black/5 min-h-[calc(100vh-64px)] overflow-hidden flex  justify-center ">
-            <div className="w-full">
-              {children}
-              <Accessibility />
-            </div>
-          </main>
+          {children}
+          <Accessibility />
+          <Footer />
         </ThemeProvider>
       </body>
     </html>

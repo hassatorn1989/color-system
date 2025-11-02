@@ -9,6 +9,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Badge } from "@/components/ui/badge";
+import { TabsList, TabsTrigger } from "@/components/ui/tabs";
 interface GroupColor {
   id: string;
   name: string;
@@ -96,72 +98,91 @@ const page = () => {
     }
   }
   return (
-    <div className="accessibility-content h-[calc(100vh-72px)]  p-4 md:p-8">
-      <div className="max-w-7xl mx-auto w-7xl">
-        <div className="">
-          {loading ? (
-            <div className="flex items-center justify-center h-96">
-              <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-purple-600"></div>
-            </div>
-          ) : (
-            <>
-              {!loading && baseColor.length > 0 && (
-                <div className="bg-white rounded-2xl shadow-xl p-4 md:p-8 mb-6">
-                  <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-2">
-                    {[
-                      { key: "monochromatic", label: "โมโนโครมาติก" },
-                      { key: "analogous", label: "อนาลอกัส" },
-                      { key: "complementary", label: "คอมพลีเมนทารี" },
-                      {
-                        key: "split-complementary",
-                        label: "สปลิทคอมพลีเมนทารี",
-                      },
-                      { key: "triadic", label: "ไตรแอดิก" },
-                      { key: "tetradic", label: "เตตระดิก" },
-                      { key: "square", label: "สแควร์" },
-                    ].map((type) => (
-                      <button
-                        key={type.key}
-                        className={`px-3 py-2 rounded-lg font-medium transition-all text-sm ${
-                          harmonyType === type.key
-                            ? "bg-purple-600 text-white shadow-lg"
-                            : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                        }`}
-                        onClick={() => setHarmonyType(type.key)}
-                      >
-                        {type.label}
-                      </button>
-                    ))}
+    <div className="min-h-screen bg-background">
+      <main className="pt-32 pb-20 px-4">
+        <div className="max-w-7xl mx-auto">
+          {/* Hero Section */}
+          <div className="text-center mb-16">
+            <Badge variant="outline" className="mb-4 px-4 py-2">
+              สำรวจสเปกตรัมสี
+            </Badge>
+            <br />
+            <span className="text-5xl md:text-6xl font-bold  mb-4 leading-tight text-balance bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
+              วงจรสี
+            </span>
+            <p className="text-xl text-foreground/60 max-w-3xl mx-auto leading-relaxed">
+              ทำความเข้าใจโครงสร้างพื้นฐานของความสัมพันธ์ของสีและวิธีที่สีโต้ตอบกันในวงจรสีแบบดั้งเดิม
+            </p>
+          </div>
+          <div className="">
+            {loading ? (
+              <div className="flex items-center justify-center h-96">
+                <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-"></div>
+              </div>
+            ) : (
+              <>
+                {!loading && baseColor.length > 0 && (
+                  <div className="mb-6">
+                    <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-2">
+                      {[
+                        { key: "monochromatic", label: "โมโนโครมาติก" },
+                        { key: "analogous", label: "อนาลอกัส" },
+                        { key: "complementary", label: "คอมพลีเมนทารี" },
+                        {
+                          key: "split-complementary",
+                          label: "สปลิทคอมพลีเมนทารี",
+                        },
+                        { key: "triadic", label: "ไตรแอดิก" },
+                        { key: "tetradic", label: "เตตระดิก" },
+                        { key: "square", label: "สแควร์" },
+                      ].map((type) => (
+                        <button
+                          key={type.key}
+                          className={`px-3 py-2 rounded-lg font-medium transition-all text-sm ${
+                            harmonyType === type.key
+                              ? "bg-primary text-primary-foreground"
+                              : "bg-secondary/10 text-foreground hover:bg-secondary/20"
+                          }`}
+                          onClick={() => setHarmonyType(type.key)}
+                        >
+                          {type.label}
+                        </button>
+                      ))}
 
-                    <div>
-                      <Select
-                        value={groupColorId}
-                        onValueChange={(value) => selectColor(value)}
-                      >
-                        <SelectTrigger className="w-full">
-                          <SelectValue placeholder="Select Group Color" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {groupColor.map((groupColor, index) => (
-                            <SelectItem key={index} value={groupColor.id}>
-                              {groupColor.name}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
+                      {/* <div className="col-span-2 md:col-span-1 lg:col-span-2">
+                        <Select
+                          value={groupColorId}
+                          onValueChange={(value) => selectColor(value)}
+                          className="w-full"
+                        >
+                          <SelectTrigger className="w-full">
+                            <SelectValue placeholder="Select Group Color" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {groupColor.map((groupColor, index) => (
+                              <SelectItem key={index} value={groupColor.id}>
+                                {groupColor.name}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div> */}
                     </div>
+                    <ColorWheelHarmony
+                      baseColor={baseColor}
+                      onSendData={handleSendData}
+                      harmonyType={harmonyType}
+                      groupColor={groupColor}
+                      groupColorId={groupColorId}
+                      selectColor={selectColor}
+                    />
                   </div>
-                  <ColorWheelHarmony
-                    baseColor={baseColor}
-                    onSendData={handleSendData}
-                    harmonyType={harmonyType}
-                  />
-                </div>
-              )}
-            </>
-          )}
+                )}
+              </>
+            )}
+          </div>
         </div>
-      </div>
+      </main>
     </div>
   );
 };

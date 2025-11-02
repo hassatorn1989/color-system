@@ -264,7 +264,7 @@ export const ColorPattern: React.FC<ColorPatternProps> = ({ harmonyColors, baseC
       </h2>
       
       {/* Grid สำหรับ color patterns */}
-      <div className="grid grid-cols-4 gap-2 mb-4">
+      <div className="grid grid-cols-2 gap-2 mb-4">
         {colorPatterns.map((pattern, idx) => (
           <div key={idx} className="relative group">
             <div className="flex rounded-lg overflow-hidden shadow-sm border border-gray-200">
