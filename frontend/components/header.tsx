@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { ModeToggle } from "./mode-toggle";
 
 export default function Page() {
   const [isOpen, setIsOpen] = useState(false);
@@ -53,6 +54,8 @@ export default function Page() {
             >
               ติดต่อเรา
             </Link>
+
+            <ModeToggle />
           </div>
 
           {/* Mobile Menu Button */}
