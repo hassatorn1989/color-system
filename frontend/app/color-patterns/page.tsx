@@ -31,17 +31,69 @@ interface Pattern {
   file_path: string;
   svg: string;
 }
+
+// แปลง HEX เป็น RGB
+const hexToRgb = (hex: string) => {
+  hex = hex.replace('#', '').trim();
+
+  if (![3, 6].includes(hex.length)) {
+    throw new Error(`Invalid HEX color: ${hex}`);
+  }
+
+  // #abc → #aabbcc
+  if (hex.length === 3) {
+    hex = hex.split('').map(c => c + c).join('');
+  }
+
+  const value = parseInt(hex, 16);
+
+  return {
+    r: (value >> 16) & 255,
+    g: (value >> 8) & 255,
+    b: value & 255,
+  };
+};
+
+// ผสม HEX หลายสี
+const mixHexColors = (hexColors: string[], alpha = 1) => {
+  if (!hexColors || hexColors.length === 0) {
+    return `rgba(0, 0, 0, ${alpha})`;
+  }
+
+  const rgbs = hexColors.map(hexToRgb);
+  const len = rgbs.length;
+
+  const r = Math.round(rgbs.reduce((s, c) => s + c.r, 0) / len);
+  const g = Math.round(rgbs.reduce((s, c) => s + c.g, 0) / len);
+  const b = Math.round(rgbs.reduce((s, c) => s + c.b, 0) / len);
+
+  return {
+    r: r,
+    g: g,
+    b: b,
+    a: alpha,
+  };
+};
+
+
 // import Overcast from "../assets/overcast.svg";
 export default function Page() {
   const [scale, setScale] = useState(1);
   // Color picker state
-  const [foregroundColor, setForegroundColor] = useState({
-    r: 0,
-    g: 0,
-    b: 0,
+  const [foregroundColor, setForegroundColor] = useState(
+    "#000000,#000000,#000000,#000000"
+  );
+  const [backgroundColor, setBackgroundColor] = useState(
+    "#FFFFFF,#FFFFFF,#FFFFFF,#FFFFFF"
+  );
+
+  const [foregroundColorRGBA, setForegroundColorRGBA] = useState({
+    r: 255,
+    g: 87,
+    b: 51,
     a: 1,
   });
-  const [backgroundColor, setBackgroundColor] = useState({
+  const [backgroundColorRGBA, setBackgroundColorRGBA] = useState({
     r: 255,
     g: 255,
     b: 255,
@@ -57,7 +109,48 @@ export default function Page() {
 
   useEffect(() => {
     getPattern();
+    loadForgroundCopiedColors();
+    loadBackgroundCopiedColors();
   }, []);
+
+  function loadForgroundCopiedColors() {
+    const savedColors = localStorage.getItem("copiedForegroundColors");
+    if (savedColors) {
+      setForegroundColor(savedColors);
+    }
+    const foregroundColorCopies = savedColors
+      ?.replace(/\s+/g, "") // ลบช่องว่างทั้งหมด
+      .split(","); // แยกเป็น array
+    const mixedColor = mixHexColors(foregroundColorCopies || [], 1);
+    if (typeof mixedColor === "object" && mixedColor !== null) {
+      setForegroundColorRGBA({
+        r: mixedColor.r,
+        g: mixedColor.g,
+        b: mixedColor.b,
+        a: mixedColor.a,
+      });
+    }
+  }
+
+  function loadBackgroundCopiedColors() {
+    const savedColors = localStorage.getItem("copiedBackgroundColors");
+    if (savedColors) {
+      setBackgroundColor(savedColors);
+    }
+    const backgroundColorCopies = savedColors
+      ?.replace(/\s+/g, "") // ลบช่องว่างทั้งหมด
+      .split(","); // แยกเป็น array
+    const mixedColor = mixHexColors(backgroundColorCopies || [], 1);
+    if (typeof mixedColor === "object" && mixedColor !== null) {
+      setBackgroundColorRGBA({
+        r: mixedColor.r,
+        g: mixedColor.g,
+        b: mixedColor.b,
+        a: mixedColor.a,
+      });
+    }
+  }
+
   function handleZoomIn() {
     setScale((prev) => Math.min(prev + 0.1, 2));
   }
@@ -105,6 +198,8 @@ export default function Page() {
         axios
           .post("/api/pattern", formData) // <- pass FormData ตรง ๆ
           .then((response) => {
+            loadBackgroundCopiedColors();
+            loadForgroundCopiedColors();
             setSvg(response.data.svg);
           })
           .catch((error) => {
@@ -150,18 +245,18 @@ export default function Page() {
     canvas.height = height;
 
     // Set background color
-    ctx.fillStyle = `rgba(${backgroundColor.r},${backgroundColor.g},${backgroundColor.b},${backgroundColor.a})`;
+    ctx.fillStyle = `rgba(${backgroundColorRGBA.r},${backgroundColorRGBA.g},${backgroundColorRGBA.b},${backgroundColorRGBA.a})`;
     ctx.fillRect(0, 0, width, height);
 
     // Create colored SVG for the pattern tile
     const coloredSvg = svg
       .replace(
         /fill=".*?"/g,
-        `fill="rgba(${foregroundColor.r},${foregroundColor.g},${foregroundColor.b},${foregroundColor.a})"`
+        `fill="rgba(${foregroundColorRGBA.r.toString()},${foregroundColorRGBA.g.toString()},${foregroundColorRGBA.b.toString()},${foregroundColorRGBA.a.toString()})"`
       )
       .replace(
         /stroke=".*?"/g,
-        `stroke="rgba(${foregroundColor.r},${foregroundColor.g},${foregroundColor.b},${foregroundColor.a})"`
+        `stroke="rgba(${foregroundColorRGBA.r.toString()},${foregroundColorRGBA.g.toString()},${foregroundColorRGBA.b.toString()},${foregroundColorRGBA.a.toString()})"`
       )
       .replace(/<svg /, `<svg `);
 
@@ -197,14 +292,36 @@ export default function Page() {
     });
     img.src = URL.createObjectURL(svgBlob);
   }
+
+  function clearColors(type?: "foreground" | "background") {
+    if (type === "foreground") {
+      setForegroundColorRGBA({
+        r: 0,
+        g: 0,
+        b: 0,
+        a: 1,
+      });
+      setForegroundColor("#000000,#000000,#000000,#000000");
+    }
+    if (type === "background") {
+      setBackgroundColorRGBA({
+        r: 255,
+        g: 255,
+        b: 255,
+        a: 1,
+      });
+      setBackgroundColor("#FFFFFF,#FFFFFF,#FFFFFF,#FFFFFF");
+    }
+  }
   return (
     <div className="min-h-screen bg-background">
       <main className="pt-32 pb-20 px-4">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <Badge variant="outline" className="mb-4 px-4 py-2">
+            <Badge fontVariant="outline" className="mb-4 px-4 py-2">
               ความสามัคคีของสี
-            </Badge><br />
+            </Badge>
+            <br />
             <span className="text-5xl md:text-6xl font-bold  mb-4 leading-tight text-balance bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
               แบบรูปสี
             </span>
@@ -326,13 +443,13 @@ export default function Page() {
                               onClick={() => {
                                 if (svg !== null) {
                                   setSvg(null);
-                                  setBackgroundColor({
+                                  setBackgroundColorRGBA({
                                     r: 255,
                                     g: 255,
                                     b: 255,
                                     a: 1,
                                   });
-                                  setForegroundColor({
+                                  setForegroundColorRGBA({
                                     r: 0,
                                     g: 0,
                                     b: 0,
@@ -362,7 +479,7 @@ export default function Page() {
                               {/* Color picker and RGBA value */}
                               <div className="flex gap-2 items-center">
                                 {/* Color preview box */}
-                                <Popover>
+                                {/* <Popover>
                                   <PopoverTrigger asChild>
                                     <div
                                       style={{
@@ -370,7 +487,7 @@ export default function Page() {
                                         minHeight: 32,
                                         borderRadius: 6,
                                         border: "1px solid #ccc",
-                                        background: `rgba(${foregroundColor.r},${foregroundColor.g},${foregroundColor.b},${foregroundColor.a})`,
+                                        background: `rgba(${foregroundColorRGBA.r},${foregroundColorRGBA.g},${foregroundColorRGBA.b},${foregroundColorRGBA.a})`,
                                         boxShadow: "0 0 2px #aaa",
                                       }}
                                     />
@@ -380,28 +497,32 @@ export default function Page() {
                                     side="bottom"
                                   >
                                     <RgbaColorPicker
-                                      color={foregroundColor}
-                                      onChange={setForegroundColor}
+                                      color={foregroundColorRGBA}
+                                      onChange={setForegroundColorRGBA}
                                     />
                                   </PopoverContent>
-                                </Popover>
+                                </Popover> */}
+
+                                <div
+                                  style={{
+                                    minWidth: 32,
+                                    minHeight: 32,
+                                    borderRadius: 6,
+                                    border: "1px solid #ccc",
+                                    background: `rgba(${foregroundColorRGBA.r},${foregroundColorRGBA.g},${foregroundColorRGBA.b},${foregroundColorRGBA.a})`,
+                                    boxShadow: "0 0 2px #aaa",
+                                  }}
+                                />
                                 {/* RGBA value display */}
                                 <Input
-                                  value={`rgba(${foregroundColor.r}, ${foregroundColor.g}, ${foregroundColor.b}, ${foregroundColor.a})`}
+                                  value={foregroundColor}
                                   readOnly
                                   className="w-[calc(100%-40px)] font-mono"
                                 />
                                 {/* Clear button */}
                                 <Button
                                   variant="outline"
-                                  onClick={() =>
-                                    setForegroundColor({
-                                      r: 0,
-                                      g: 0,
-                                      b: 0,
-                                      a: 1,
-                                    })
-                                  }
+                                  onClick={() => clearColors('foreground')}
                                   className="ml-2"
                                 >
                                   Clear
@@ -414,7 +535,7 @@ export default function Page() {
                               {/* Color picker and RGBA value */}
                               <div className="flex gap-2 items-center">
                                 {/* Color preview box */}
-                                <Popover>
+                                {/* <Popover>
                                   <PopoverTrigger asChild>
                                     <div
                                       style={{
@@ -422,7 +543,7 @@ export default function Page() {
                                         minHeight: 32,
                                         borderRadius: 6,
                                         border: "1px solid #ccc",
-                                        background: `rgba(${backgroundColor.r},${backgroundColor.g},${backgroundColor.b},${backgroundColor.a})`,
+                                        background: `rgba(${backgroundColorRGBA.r},${backgroundColorRGBA.g},${backgroundColorRGBA.b},${backgroundColorRGBA.a})`,
                                         boxShadow: "0 0 2px #aaa",
                                       }}
                                     />
@@ -432,28 +553,32 @@ export default function Page() {
                                     side="bottom"
                                   >
                                     <RgbaColorPicker
-                                      color={backgroundColor}
-                                      onChange={setBackgroundColor}
+                                      color={backgroundColorRGBA}
+                                      onChange={setBackgroundColorRGBA}
+                                      aria-disabled={true}
                                     />
                                   </PopoverContent>
-                                </Popover>
+                                </Popover> */}
+                                <div
+                                  style={{
+                                    minWidth: 32,
+                                    minHeight: 32,
+                                    borderRadius: 6,
+                                    border: "1px solid #ccc",
+                                    background: `rgba(${backgroundColorRGBA.r},${backgroundColorRGBA.g},${backgroundColorRGBA.b},${backgroundColorRGBA.a})`,
+                                    boxShadow: "0 0 2px #aaa",
+                                  }}
+                                />
                                 {/* RGBA value display */}
                                 <Input
-                                  value={`rgba(${backgroundColor.r}, ${backgroundColor.g}, ${backgroundColor.b}, ${backgroundColor.a})`}
+                                  value={backgroundColor}
                                   readOnly
                                   className="w-[calc(100%-40px)] font-mono"
                                 />
                                 {/* Clear button */}
                                 <Button
                                   variant="outline"
-                                  onClick={() =>
-                                    setBackgroundColor({
-                                      r: 255,
-                                      g: 255,
-                                      b: 255,
-                                      a: 1,
-                                    })
-                                  }
+                                  onClick={() => clearColors('background')}
                                   className="ml-2"
                                 >
                                   Clear
@@ -502,8 +627,8 @@ export default function Page() {
                       >
                         <SvgComponents
                           svg={svg}
-                          foregroundColor={foregroundColor}
-                          backgroundColor={backgroundColor}
+                          foregroundColor={foregroundColorRGBA}
+                          backgroundColor={backgroundColorRGBA}
                         />
                       </div>
                     )}
