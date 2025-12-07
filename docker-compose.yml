@@ -1,0 +1,48 @@
+services:
+  nginx:
+    image: nginx:latest
+    restart: unless-stopped
+    container_name: color_system_nginx
+    tty: true
+    ports:
+      - "8000:80"
+    volumes:
+      - ./color-system-admin:/var/www/html/admin
+      - ./frontend:/var/www/html/user
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - php
+    networks:
+      - color_system_net
+
+  php:
+    build: ./php
+    restart: unless-stopped
+    container_name: color_system_admin
+    tty: true
+    volumes:
+      - ./color-system-admin:/var/www/html
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    ports:
+      - "8100:9000"
+    networks:
+      - color_system_net
+
+  nextjs:
+    build: ./frontend
+    restart: unless-stopped
+    container_name: color_system_nextjs
+    tty: true
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/var/www/html
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - color_system_net
+
+networks:
+  color_system_net:
+    driver: bridge

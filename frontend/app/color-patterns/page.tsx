@@ -349,7 +349,7 @@ export default function Page() {
                       <h3 className="font-semibold">Select a Pattern</h3>
                     </AccordionTrigger>
                     <AccordionContent className="accessibility-content flex flex-col gap-4 text-balance">
-                      <span className="font-semibold">File Format</span>
+                      {/* <span className="font-semibold">File Format</span>
                       <div className="flex gap-4 justify-center">
                         <ToggleGroup
                           value={fileType}
@@ -362,7 +362,7 @@ export default function Page() {
                           <ToggleGroupItem value="svg">SVG</ToggleGroupItem>
                           <ToggleGroupItem value="image">Image</ToggleGroupItem>
                         </ToggleGroup>
-                      </div>
+                      </div> */}
                       <div>
                         <input
                           type="file"

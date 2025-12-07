@@ -3,7 +3,13 @@ import React, { useState, useRef, useEffect } from "react";
 import { ColorPattern } from "./ColorPattern";
 import { Card } from "./ui/card";
 import { Label } from "./ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./ui/select";
 import { GroupColor } from "@/lib/generated/prisma/wasm";
 
 interface ColorWheelHarmonyProps {
@@ -219,13 +225,9 @@ const ColorHarmonyWheel = ({
         {/* Interactive Wheel */}
         <div className="flex flex-col ">
           <Card className="p-8 bg-card border-border w-full">
-           <Select
-              value={groupColorId}
-              onValueChange={(value) => selectColor(value)}
-              className="w-full mb-6"
-            >
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder="เลือกชุดสีพื้นฐาน" />
+            <Select value={groupColorId} onValueChange={selectColor}>
+              <SelectTrigger className="w-full mb-6">
+                <SelectValue placeholder="Select a color" />
               </SelectTrigger>
               <SelectContent>
                 {groupColor.map((groupColor, index) => (

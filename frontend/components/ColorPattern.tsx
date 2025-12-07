@@ -20,10 +20,18 @@ export const ColorPattern: React.FC<ColorPatternProps> = ({
   ) => {
     try {
       const colorString =
-        type === "background"
-          ? `${colors.join(", ")}`
-          : `${colors.join(", ")}`;
-      await navigator.clipboard.writeText(colorString);
+        type === "background" ? `${colors.join(", ")}` : `${colors.join(", ")}`;
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(colorString);
+      } else {
+        // Fallback for unsupported browsers
+        const textarea = document.createElement("textarea");
+        textarea.value = colorString;
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand("copy");
+        document.body.removeChild(textarea);
+      }
       setCopiedIndex(index);
       setTimeout(() => setCopiedIndex(null), 2000);
       localStorage.setItem(
@@ -287,6 +295,82 @@ export const ColorPattern: React.FC<ColorPatternProps> = ({
     // return uniquePatterns.slice(0, 20);
   }, [harmonyColors, baseColor, harmonyType]);
 
+  const mixColors = (colors: string[]): string => {
+    if (colors.length === 0) return "#000000";
+    let r = 0,
+      g = 0,
+      b = 0;
+    colors.forEach((hex) => {
+      const color = hex.replace("#", "");
+      r += parseInt(color.substring(0, 2), 16);
+      g += parseInt(color.substring(2, 4), 16);
+      b += parseInt(color.substring(4, 6), 16);
+    });
+    r = Math.round(r / colors.length);
+    g = Math.round(g / colors.length);
+    b = Math.round(b / colors.length);
+
+    const colorName = hexToColorName(
+      "#" +
+        r.toString(16).padStart(2, "0") +
+        g.toString(16).padStart(2, "0") +
+        b.toString(16).padStart(2, "0")
+    );
+    return colorName;
+  };
+
+  function hexToColorName(hex: string): string {
+    // แปลง hex เป็น rgb
+    const r = parseInt(hex.slice(1, 3), 16);
+    const g = parseInt(hex.slice(3, 5), 16);
+    const b = parseInt(hex.slice(5, 7), 16);
+
+    // เพิ่มฐานข้อมูลสีมาตรฐาน (ตัวอย่างบางส่วน)
+    const colors = [
+      { name: "สีดำ", rgb: [0, 0, 0] },
+      { name: "สีขาว", rgb: [255, 255, 255] },
+      { name: "สีแดง", rgb: [255, 0, 0] },
+      { name: "สีแดงอ่อน", rgb: [255, 102, 102] },
+      { name: "สีแดงเข้ม", rgb: [139, 0, 0] },
+      { name: "สีเขียว", rgb: [0, 128, 0] },
+      { name: "สีเขียวอ่อน", rgb: [144, 238, 144] },
+      { name: "สีเขียวเข้ม", rgb: [0, 100, 0] },
+      { name: "สีน้ำเงิน", rgb: [0, 0, 255] },
+      { name: "สีฟ้า", rgb: [0, 191, 255] },
+      { name: "สีฟ้าอ่อน", rgb: [135, 206, 250] },
+      { name: "สีฟ้าเข้ม", rgb: [0, 0, 139] },
+      { name: "สีเหลือง", rgb: [255, 255, 0] },
+      { name: "สีทอง", rgb: [255, 215, 0] },
+      { name: "สีส้ม", rgb: [255, 165, 0] },
+      { name: "สีส้มอ่อน", rgb: [255, 200, 124] },
+      { name: "สีส้มเข้ม", rgb: [255, 140, 0] },
+      { name: "สีม่วง", rgb: [128, 0, 128] },
+      { name: "สีม่วงอ่อน", rgb: [221, 160, 221] },
+      { name: "สีชมพู", rgb: [255, 192, 203] },
+      { name: "สีชมพูอ่อน", rgb: [255, 182, 193] },
+      { name: "สีน้ำตาล", rgb: [165, 42, 42] },
+      { name: "สีเทา", rgb: [128, 128, 128] },
+      { name: "สีเทาอ่อน", rgb: [211, 211, 211] },
+      // ... เพิ่มเฉดสีอื่นๆตามต้องการ ...
+    ];
+
+    // หา color ที่ใกล้ที่สุด
+    let minDist = Infinity;
+    let closest = "ไม่ทราบชื่อสี";
+    colors.forEach((c) => {
+      const dist = Math.sqrt(
+        Math.pow(r - c.rgb[0], 2) +
+          Math.pow(g - c.rgb[1], 2) +
+          Math.pow(b - c.rgb[2], 2)
+      );
+      if (dist < minDist) {
+        minDist = dist;
+        closest = c.name;
+      }
+    });
+    return closest;
+  }
+
   return (
     <div className="w-full h-full p-4">
       <h2 className="text-lg font-bold mb-4 text-gray-800">
@@ -320,7 +404,7 @@ export const ColorPattern: React.FC<ColorPatternProps> = ({
                 <div className="relative">
                   <span className="text-white text-xs font-medium px-2 py-1 rounded flex items-center">
                     <Copy className="w-4 h-4 inline-block mr-1" />
-                    คัดลอก
+                    {mixColors(pattern)}
                   </span>
                   {/* เมนูตัวเลือก */}
                   <div className="absolute top-full left-0 mt-1 bg-white shadow-lg rounded-lg border border-gray-200 z-10 hidden group-hover:block">
