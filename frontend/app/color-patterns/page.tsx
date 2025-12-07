@@ -11,10 +11,10 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+// import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { ZoomOut, ZoomIn, RefreshCcw, X, Pyramid, Badge } from "lucide-react";
 import { useEffect, useState } from "react";
-import { RgbaColorPicker } from "react-colorful";
+// import { RgbaColorPicker } from "react-colorful";
 import {
   Popover,
   PopoverContent,

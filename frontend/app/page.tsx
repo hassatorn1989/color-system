@@ -1,3 +1,4 @@
+'use client';
 import Hero from "@/components/hero";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";

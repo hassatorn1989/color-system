@@ -2,15 +2,15 @@
 import React, { useEffect } from "react";
 import ColorWheelHarmony from "@/components/ColorWheel";
 import axios from "axios";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+// import {
+//   Select,
+//   SelectContent,
+//   SelectItem,
+//   SelectTrigger,
+//   SelectValue,
+// } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import { TabsList, TabsTrigger } from "@/components/ui/tabs";
+// import { TabsList, TabsTrigger } from "@/components/ui/tabs";
 interface GroupColor {
   id: string;
   name: string;

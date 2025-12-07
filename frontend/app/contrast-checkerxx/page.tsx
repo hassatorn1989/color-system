@@ -1,3 +1,4 @@
+'use client';
 import React from 'react'
 import ContastChecker from '@/components/ContastChecker'
 const page = () => {

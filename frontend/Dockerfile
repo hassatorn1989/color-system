@@ -1,19 +1,33 @@
-# BUILD STAGE
+# ---- Build Stage ----
 FROM node:18-alpine AS builder
-
 WORKDIR /app
 
-# ติดตั้ง pnpm
-RUN npm install -g pnpm
+# Install deps
+COPY package*.json ./
+RUN npm install
 
-# copy lockfile และ package.json ก่อน
-COPY package.json pnpm-lock.yaml* ./
-
-# ติดตั้ง dependencies
-RUN pnpm install --frozen-lockfile
-
-# copy source code
+# Copy project
 COPY . .
 
-# build nextjs standalone
-RUN pnpm run build
+# Build Next.js standalone
+RUN npm run build
+
+# ---- Production Stage ----
+FROM node:18-alpine
+WORKDIR /app
+
+# PM2
+RUN npm install -g pm2
+
+# Copy standalone server and dependencies
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/package*.json ./        
+COPY --from=builder /app/node_modules ./      
+
+ENV PORT=3000
+EXPOSE 3000
+
+# Start server with PM2
+CMD ["pm2-runtime", "server.js"]

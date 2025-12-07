@@ -1,3 +1,4 @@
+'use server';
 import { PrismaClient } from "@/lib/generated/prisma";
 import { NextResponse, type NextRequest } from "next/server";
 const prisma = new PrismaClient();

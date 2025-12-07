@@ -7,8 +7,7 @@ services:
     ports:
       - "8000:80"
     volumes:
-      - ./color-system-admin:/var/www/html/admin
-      - ./frontend:/var/www/html/user
+      - ./color-system-admin:/var/www/html
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
     depends_on:
       - php
@@ -18,7 +17,7 @@ services:
   php:
     build: ./php
     restart: unless-stopped
-    container_name: color_system_admin
+    container_name: color_system_php
     tty: true
     volumes:
       - ./color-system-admin:/var/www/html
