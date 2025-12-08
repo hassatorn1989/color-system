@@ -9,7 +9,7 @@ RUN apt-get update && apt-get install -y default-mysql-client openssl ca-certifi
 COPY package.json ./
 
 # ติดตั้ง dependencies ด้วย npm
-RUN npm ci --legacy-peer-deps
+RUN npm install --legacy-peer-deps
 
 # ---- Builder ----
 FROM node:20-slim AS builder
