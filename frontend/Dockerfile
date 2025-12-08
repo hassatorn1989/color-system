@@ -2,41 +2,48 @@
 FROM node:20-slim AS deps
 WORKDIR /app
 
-RUN apt-get update && apt-get install -y default-mysql-client
+# ติดตั้ง mysql client และ dependencies
+RUN apt-get update && apt-get install -y default-mysql-client openssl ca-certificates && rm -rf /var/lib/apt/lists/*
 
-RUN apt-get update && apt-get install -y openssl ca-certificates && rm -rf /var/lib/apt/lists/*
-RUN npm install -g pnpm
+# คัดลอกไฟล์ package
+COPY package.json package-lock.json ./
 
-COPY package.json pnpm-lock.yaml ./
-
-RUN pnpm install --frozen-lockfile
+# ติดตั้ง dependencies ด้วย npm
+RUN npm ci --legacy-peer-deps
 
 # ---- Builder ----
 FROM node:20-slim AS builder
 WORKDIR /app
 
+# ติดตั้ง dependencies ที่จำเป็น
 RUN apt-get update && apt-get install -y openssl ca-certificates && rm -rf /var/lib/apt/lists/*
-RUN npm install -g pnpm
 
+# คัดลอก node_modules จาก stage deps
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
+# generate Prisma client
 RUN npx prisma generate
-RUN pnpm run build
+
+# build Next.js
+RUN npm run build
 
 # ---- Runner ----
 FROM node:20-slim AS runner
 WORKDIR /app
 
+# ติดตั้ง runtime dependencies
 RUN apt-get update && apt-get install -y openssl ca-certificates && rm -rf /var/lib/apt/lists/*
 
-RUN npm install -g pm2 pnpm
+RUN npm install -g pm2
 
-COPY --from=builder /app/package.json ./
+# คัดลอกไฟล์จาก stage builder
+COPY --from=builder /app/package.json ./package.json
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/public ./public
-COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/standalone ./ 
 COPY --from=builder /app/.next/static ./.next/static
 
 EXPOSE 3000
+
 CMD ["pm2-runtime", "server.js"]
