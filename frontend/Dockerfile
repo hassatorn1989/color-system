@@ -1,33 +1,42 @@
-# ---- Builder Stage ----
-FROM node:20-alpine AS builder
+# ---- Deps ----
+FROM node:20-slim AS deps
 WORKDIR /app
 
-# Copy package files and install deps
-COPY package*.json ./
-RUN npm install
+RUN apt-get update && apt-get install -y default-mysql-client
 
-# Copy project files
+RUN apt-get update && apt-get install -y openssl ca-certificates && rm -rf /var/lib/apt/lists/*
+RUN npm install -g pnpm
+
+COPY package.json pnpm-lock.yaml ./
+
+RUN pnpm install --frozen-lockfile
+
+# ---- Builder ----
+FROM node:20-slim AS builder
+WORKDIR /app
+
+RUN apt-get update && apt-get install -y openssl ca-certificates && rm -rf /var/lib/apt/lists/*
+RUN npm install -g pnpm
+
+COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-# Build Next.js standalone
-RUN npm run build
+RUN npx prisma generate
+RUN pnpm run build
 
-# ---- Production Stage ----
-FROM node:20-alpine
+# ---- Runner ----
+FROM node:20-slim AS runner
 WORKDIR /app
 
-# Install PM2 globally
-RUN npm install -g pm2
+RUN apt-get update && apt-get install -y openssl ca-certificates && rm -rf /var/lib/apt/lists/*
 
-# Copy standalone server and dependencies from builder
-COPY --from=builder /app/.next/standalone ./ 
-COPY --from=builder /app/.next/static ./.next/static
+RUN npm install -g pm2 pnpm
+
+COPY --from=builder /app/package.json ./
+COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/public ./public
-COPY --from=builder /app/package*.json ./        
-COPY --from=builder /app/node_modules ./      
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
 
-ENV PORT=3000
 EXPOSE 3000
-
-# Start server with PM2
 CMD ["pm2-runtime", "server.js"]

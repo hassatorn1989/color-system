@@ -53,6 +53,9 @@ services:
       - "3000:3000"
     volumes:
       - ./frontend:/var/www/html
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=mysql://docker_user:1234@host.docker.internal:3306/db-color-system
     extra_hosts:
       - "host.docker.internal:host-gateway"
     networks:

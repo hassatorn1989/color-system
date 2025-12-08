@@ -10,7 +10,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
-import { GroupColor } from "@/lib/generated/prisma/wasm";
+// import { GroupColor } from "@/lib/generated/prisma/wasm";
+
+interface GroupColor {
+  id: string;
+  name: string;
+  created_at: Date;
+  updated_at: Date;
+  deleted_at: Date | null;
+  is_active: boolean;
+}
 
 interface ColorWheelHarmonyProps {
   baseColor: string[];
