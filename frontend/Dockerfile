@@ -1,26 +1,26 @@
-# ---- Build Stage ----
-FROM node:18-alpine AS builder
+# ---- Builder Stage ----
+FROM node:20-alpine AS builder
 WORKDIR /app
 
-# Install deps
+# Copy package files and install deps
 COPY package*.json ./
 RUN npm install
 
-# Copy project
+# Copy project files
 COPY . .
 
 # Build Next.js standalone
 RUN npm run build
 
 # ---- Production Stage ----
-FROM node:18-alpine
+FROM node:20-alpine
 WORKDIR /app
 
-# PM2
+# Install PM2 globally
 RUN npm install -g pm2
 
-# Copy standalone server and dependencies
-COPY --from=builder /app/.next/standalone ./
+# Copy standalone server and dependencies from builder
+COPY --from=builder /app/.next/standalone ./ 
 COPY --from=builder /app/.next/static ./.next/static
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/package*.json ./        
