@@ -5,7 +5,7 @@ services:
     container_name: color_system_nginx
     tty: true
     ports:
-      - "8000:80"
+      - "3200:80"
     volumes:
       - ./color-system-admin:/var/www/html
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
@@ -40,7 +40,7 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
     ports:
-      - "8100:9000"
+      - "3100:9000"
     networks:
       - color_system_net
 
