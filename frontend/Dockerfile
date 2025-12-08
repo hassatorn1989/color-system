@@ -6,7 +6,7 @@ WORKDIR /app
 RUN apt-get update && apt-get install -y default-mysql-client openssl ca-certificates && rm -rf /var/lib/apt/lists/*
 
 # คัดลอกไฟล์ package
-COPY package.json package-lock.json ./
+COPY package.json ./
 
 # ติดตั้ง dependencies ด้วย npm
 RUN npm ci --legacy-peer-deps
