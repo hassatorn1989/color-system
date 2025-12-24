@@ -50,7 +50,7 @@ services:
     container_name: color_system_nextjs
     tty: true
     ports:
-      - "3000:3000"
+      - "3300:3000"
     volumes:
       - ./frontend:/var/www/html
     environment:
