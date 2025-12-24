@@ -1,7 +1,7 @@
 /*M!999999\- enable the sandbox mode */ 
 -- MariaDB dump 10.19-11.8.2-MariaDB, for Win64 (AMD64)
 --
--- Host: 127.0.0.1    Database: db-color-system
+-- Host: localhost    Database: db-color-system
 -- ------------------------------------------------------
 -- Server version	11.8.2-MariaDB
 
@@ -408,7 +408,7 @@ LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
 set autocommit=0;
 INSERT INTO `users` VALUES
-('d8f05fbf-9fa1-4154-8a86-b6b5f86ff497','admin','Administrator','$2y$12$VdtVyLrf2o2QFAwZ.9J1muALncnA123QMFjhvgdXQ2hSs/ZuHp7p6','admin',1,'2025-10-02 06:48:40','2025-10-02 06:48:40',NULL);
+('d8f05fbf-9fa1-4154-8a86-b6b5f86ff497','admin','Administrator','$2y$12$fazxzU84C6gX2.MlOmDCOe.tSZPmedMcM2CRpUvCYHIJu1lFBNGmK','admin',1,'2025-10-02 06:48:40','2025-10-02 06:48:40',NULL);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 commit;
@@ -422,4 +422,4 @@ commit;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*M!100616 SET NOTE_VERBOSITY=@OLD_NOTE_VERBOSITY */;
 
--- Dump completed on 2025-12-08 23:31:32
+-- Dump completed on 2025-12-24 20:37:08
