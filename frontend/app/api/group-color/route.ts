@@ -9,6 +9,6 @@ export async function GET() {
     return new Response(JSON.stringify({ groupColor }), { status: 200 });
   } catch (error) {
     console.error('Prisma query error:', error);
-    return new Response("Error fetching group colors", { status: 500 });
+    return new Response("Error fetching group colors :" + error, { status: 500 });
   }
 }
