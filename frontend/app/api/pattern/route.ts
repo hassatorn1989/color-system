@@ -63,7 +63,7 @@ export async function GET() {
     console.error("Error fetching patterns:", error);
     return NextResponse.json(
       {
-        error: "Failed to fetch patterns",
+        error: "Failed to fetch patterns :" + error,
       },
       { status: 500 }
     );
