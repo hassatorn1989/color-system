@@ -21,7 +21,7 @@ services:
     container_name: color_system_nginx_nextjs
     tty: true
     ports:
-      - "8080:80"
+      - "3400:80"
     volumes:
       - ./frontend:/var/www/html
       - ./nginx/nextjs.conf:/etc/nginx/conf.d/default.conf
