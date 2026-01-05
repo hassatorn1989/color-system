@@ -17,7 +17,7 @@ export default function Page() {
           <div className="flex-shrink-0">
             <Link href="/" className="text-2xl font-bold text-primary">
               <span className="bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
-                ChromaLab
+                Sipator
               </span>
             </Link>
           </div>

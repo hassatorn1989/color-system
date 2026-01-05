@@ -221,7 +221,7 @@ export default function ContactPage() {
             <div className="space-y-6">
               <div>
                 <h3 className="text-lg font-semibold text-foreground mb-2">
-                  ChromaLab ฟรีหรือไม่
+                  Sipator ฟรีหรือไม่
                 </h3>
                 <p className="text-foreground/70">
                   ใช่! เครื่องมือและทรัพยากรทั้งหมดของเราฟรีทั้งหมด

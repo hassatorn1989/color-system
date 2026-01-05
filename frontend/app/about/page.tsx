@@ -21,7 +21,7 @@ export default function AboutPage() {
               ทำความเข้าใจทฤษฎีสี
             </span>
             <p className="text-xl text-foreground/60 max-w-3xl mx-auto leading-relaxed">
-              ChromaLab
+              Sipator
               มุ่งมั่นที่จะทำให้ทฤษฎีสีเข้าถึงได้และใช้งานได้จริงสำหรับนักออกแบบ
               ศิลปิน และใครก็ตามที่สนใจวิทยาศาสตร์และศิลปะของสี
             </p>

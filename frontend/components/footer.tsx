@@ -12,7 +12,7 @@ export default function Footer() {
         <div className="grid md:grid-cols-3 gap-12 mb-12">
           {/* Brand */}
           <div>
-            <h3 className="text-2xl font-bold mb-2">ChromaLab</h3>
+            <h3 className="text-2xl font-bold mb-2">Sipator</h3>
             <p className="opacity-80 leading-relaxed">คำแนะนำของคุณในการเรียนรู้ทฤษฎีสีและการสร้างแพลตฟอร์มสีที่สวยงาม</p>
           </div>
 
@@ -62,7 +62,7 @@ export default function Footer() {
         </div>
 
         <div className="border-t border-primary-foreground/20 pt-8 text-center opacity-80">
-          <p>&copy; {currentYear} ChromaLab. สงวนลิขสิทธิ์</p>
+          <p>&copy; {currentYear} Sipator. สงวนลิขสิทธิ์</p>
         </div>
       </div>
     </footer>
