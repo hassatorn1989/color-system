@@ -55,7 +55,7 @@ export default function Page() {
               ติดต่อเรา
             </Link>
 
-            <ModeToggle />
+            {/* <ModeToggle /> */}
           </div>
 
           {/* Mobile Menu Button */}
