@@ -54,6 +54,14 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a href="{{ route('group-fabric-color.index') }}" class="nav-link {{ request()->is('group-fabric-color') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-quidditch"></i>
+                        <p>
+                            Group Fabric Color
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="#" class="nav-link" data-toggle="modal" data-target="#modal-change-password" onclick="changePassword()">
                         <i class="nav-icon fas fa-key"></i>
                         <p>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class ChangePasswordController extends Controller
 {
@@ -19,7 +20,7 @@ class ChangePasswordController extends Controller
 
         // Update the user's password
         auth()->user()->update([
-            'password' => \Hash::make($request->new_password),
+            'password' => Hash::make($request->new_password),
         ]);
 
         return back()->with('success', 'Password changed successfully');
@@ -27,7 +28,7 @@ class ChangePasswordController extends Controller
 
     function checkCurrentPassword(Request $request) {
         $current_password = $request->input('current_password');
-        $isMatch = \Hash::check($current_password, auth()->user()->password);
+        $isMatch = Hash::check($current_password, auth()->user()->password);
         return response()->json(['isMatch' => $isMatch]);
     }
 }

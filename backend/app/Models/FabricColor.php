@@ -6,25 +6,22 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Str;
-class GroupColor extends Model
+class FabricColor extends Model
 {
     use HasFactory, HasUuids;
-    protected $table = 'group_color';
+
+    protected $table = 'fabric_colors';
+
+    protected $keyType = 'string';
+    public $incrementing = false;
+
     protected $fillable = [
         'id',
         'name',
+        'hex_code',
         'is_active',
         'created_at',
         'updated_at',
         'deleted_at',
     ];
-
-    protected $keyType = 'string';
-    public $incrementing = false;
-
-
-    public function getColors() {
-        return $this->hasMany(Color::class, 'group_color_id', 'id')->where('is_active', true)->orderBy('priority', 'asc');
-    }
-
 }

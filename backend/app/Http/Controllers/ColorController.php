@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Auth;
-use DB;
 use Illuminate\Http\Request;
 use \App\Models\GroupColor;
 use \App\Models\Color;
-use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+
 class ColorController extends Controller
 {
     /**

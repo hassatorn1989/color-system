@@ -1,12 +1,13 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ColorController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ChangePasswordController;
+use App\Http\Controllers\ColorController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\GroupFabricColorController;
 use App\Http\Controllers\PatternController;
 use App\Http\Controllers\UserController;
+use Illuminate\Support\Facades\Route;
 
 // auth routes
 Route::get('/', [AuthController::class, 'index'])->name('login');
@@ -46,6 +47,14 @@ Route::middleware(['auth'])->group(function () {
         Route::get('edit/{id}', [UserController::class,'edit'])->name('user.edit');
         Route::post('update/{id}', [UserController::class, 'update'])->name('user.update');
         Route::post('destroy/{id}', [UserController::class, 'destroy'])->name('user.destroy');
+    });
+
+    Route::prefix('group-fabric-color')->group(function () {
+        Route::get('/', [GroupFabricColorController::class, 'index'])->name('group-fabric-color.index');
+        Route::post('store', [GroupFabricColorController::class, 'store'])->name('group-fabric-color.store');
+        Route::post('show', [GroupFabricColorController::class, 'show'])->name('group-fabric-color.show');
+        Route::get('edit/{id}', [GroupFabricColorController::class, 'edit'])->name('group-fabric-color.edit');
+        Route::post('update-is-active/{id}', [GroupFabricColorController::class, 'updateIsActive'])->name('group-fabric-color.update_is_active');
     });
 
     // logout

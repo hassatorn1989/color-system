@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Auth;
-use DB;
 use Illuminate\Http\Request;
 use App\Models\Pattern;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Str;
 
 class PatternController extends Controller
@@ -121,7 +121,7 @@ class PatternController extends Controller
                 DB::commit();
                 return redirect()->back()->with('success', 'Pattern updated successfully.');
             }
-            
+
         } catch (\Throwable $th) {
             DB::rollBack();
             return redirect()->back()->with('error', 'Pattern update failed.');

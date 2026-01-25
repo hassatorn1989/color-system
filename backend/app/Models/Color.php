@@ -2,14 +2,14 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Str;
 class Color extends Model
 {
+    use HasFactory, HasUuids;
     protected $table = 'color';
-    /** @use HasFactory<\Database\Factories\ColorFactory> */
-    use HasFactory;
     protected $fillable = [
         'id',
         'group_color_id',
@@ -22,15 +22,4 @@ class Color extends Model
         'updated_at',
         'deleted_at',
     ];
-
-    protected static function boot(): void
-    {
-        parent::boot();
-
-        static::creating(function ($model) {
-            if (!$model->id) {
-                $model->id = (string) Str::uuid();
-            }
-        });
-    }
 }

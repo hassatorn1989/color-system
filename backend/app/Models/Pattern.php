@@ -2,15 +2,14 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Str;
 class Pattern extends Model
 {
+    use HasFactory, HasUuids;
     protected $table = 'pattern';
     protected $keyType = 'string';
-    /** @use HasFactory<\Database\Factories\PatternFactory> */
-    use HasFactory;
     protected $fillable = [
         'id',
         'name',
@@ -22,15 +21,4 @@ class Pattern extends Model
         'updated_at',
         'deleted_at',
     ];
-
-    protected static function boot(): void
-    {
-        parent::boot();
-
-        static::creating(function ($model) {
-            if (!$model->id) {
-                $model->id = (string) Str::uuid();
-            }
-        });
-    }
 }

@@ -6,10 +6,10 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Str;
-class GroupColor extends Model
+class GroupFabricColor extends Model
 {
     use HasFactory, HasUuids;
-    protected $table = 'group_color';
+    protected $table = 'group_fabric_colors';
     protected $fillable = [
         'id',
         'name',
@@ -23,8 +23,7 @@ class GroupColor extends Model
     public $incrementing = false;
 
 
-    public function getColors() {
-        return $this->hasMany(Color::class, 'group_color_id', 'id')->where('is_active', true)->orderBy('priority', 'asc');
+    public function getSubFabricColors() {
+        return $this->hasMany(SubFabricColor::class, 'group_fabric_color_id', 'id')->where('is_active', true);
     }
-
 }
