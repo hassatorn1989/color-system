@@ -54,7 +54,10 @@ Route::middleware(['auth'])->group(function () {
         Route::post('store', [GroupFabricColorController::class, 'store'])->name('group-fabric-color.store');
         Route::post('show', [GroupFabricColorController::class, 'show'])->name('group-fabric-color.show');
         Route::get('edit/{id}', [GroupFabricColorController::class, 'edit'])->name('group-fabric-color.edit');
+        Route::post('update/{id}', [GroupFabricColorController::class, 'update'])->name('group-fabric-color.update');
         Route::post('update-is-active/{id}', [GroupFabricColorController::class, 'updateIsActive'])->name('group-fabric-color.update_is_active');
+
+        Route::get('manage-color/{id}', [GroupFabricColorController::class, 'manageColor'])->name('group-fabric-color.manage_color');
     });
 
     // logout

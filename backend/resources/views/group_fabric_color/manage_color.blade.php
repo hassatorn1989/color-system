@@ -1,9 +1,9 @@
 @extends('layout.layout')
-@section('title', 'Group Fabric Color')
+@section('title', 'Group Fabric Color Management')
 @push('css')
 @endpush
 @push('js')
-    <script src="{{ asset('assets/app/group_fabric_color.js') }}"></script>
+    <script src="{{ asset('assets/app/group_fabric_color_manage.js') }}"></script>
 @endpush
 @section('content')
     <div class="content-wrapper">
@@ -12,12 +12,14 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1 class="m-0">Group Fabric Color</h1>
+                        <h1 class="m-0">Group Fabric Color Management</h1>
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item"><a href="#">Home</a></li>
-                            <li class="breadcrumb-item active">Group Fabric Color</li>
+                            <li class="breadcrumb-item"><a href="{{ route('dashboard.index') }}">Dashboard</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('group-fabric-color.index') }}">Group Fabric
+                                    Color</a></li>
+                            <li class="breadcrumb-item active">Group Fabric Color Management</li>
                         </ol>
                     </div>
                 </div>
@@ -31,29 +33,15 @@
                         <div class="card">
                             <!-- /.card-header -->
                             <div class="card-header">
-                                <h3 class="card-title">Group Fabric Color</h3>
+                                <h3 class="card-title">{{ $groupFabricColor->name }}</h3>
                             </div>
                             <div class="card-body">
-                                <div class="d-flex justify-content-end mb-3">
-                                    <button onclick="addData()" id="addButton" class="btn btn-primary">
-                                        <i class="fas fa-plus-circle mr-1"></i>
-                                        Add New
-                                    </button>
-                                </div>
                                 <div class="row">
-                                    <div class="col-12 table-responsive">
-                                        <table class="table table-striped table-sm" id="datatables" style="width:100%">
-                                            <thead>
-                                                <tr>
-                                                    <th style="width: 10px">#</th>
-                                                    <th>Name</th>
-                                                    <th>Status</th>
-                                                    <th style="width: 150px">Action</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                            </tbody>
-                                        </table>
+                                    <div class="col-md-3">
+                                        <button type="button" class="btn btn-info btn-sm mb-2" id="addNewButton">
+                                            <i class="fas fa-plus mr-1"></i>
+                                            <span class="btn-text">Add New</span>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -70,7 +58,7 @@
     <form id="form" method="POST" action="">
         @csrf
         <!-- Modal -->
-        <div class="modal fade" id="modal-default">
+        <div class="modal fade" id="modal-default" data-backdrop="static" data-keyboard="false" tabindex="-1">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -85,6 +73,13 @@
                             <input type="text" class="form-control" id="name" name="name"
                                 placeholder="Enter name">
                         </div>
+                        <hr>
+                        <div class="color-container">
+                        </div>
+                        <button type="button" class="btn btn-info btn-sm" id="addColorButton">
+                            <i class="fas fa-plus mr-1"></i>
+                            <span class="btn-text">Add Color</span>
+                        </button>
                     </div>
                     <div class="modal-footer">
                         <button type="submit" id="saveButton" class="btn btn-info">

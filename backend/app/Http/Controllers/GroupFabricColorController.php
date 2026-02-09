@@ -40,11 +40,19 @@ class GroupFabricColorController extends Controller
         $groupFabricColors = GroupFabricColor::select('*')->get();
         return DataTables::of($groupFabricColors)
             ->addIndexColumn()
-            ->addColumn('action', function ($groupFabricColor) {
-                $btn = '<button class="btn btn-sm btn-warning mr-1" data-id="' . $groupFabricColor->id . '" onclick="editGroupFabricColor(this)"><i class="fas fa-edit mr-1"></i> Edit</button>';
-                $btn .= $groupFabricColor->id && $groupFabricColor->is_active
-                    ? '<button class="btn btn-sm btn-danger" onclick="updateIsActive(this)" data-id="' . $groupFabricColor->id . '"><i class="fas fa-trash mr-1"></i> Deactivate</button>'
-                    : ($groupFabricColor->id ? '<button class="btn btn-sm btn-success" onclick="updateIsActive(this)" data-id="' . $groupFabricColor->id . '"><i class="fas fa-check mr-1"></i> Activate</button>' : '');
+            ->addColumn('action', function ($row) {
+                $btn = '<div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+                    <div class="btn-group" role="group">
+                        <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle btn-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-cogs"></i> จัดการ
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                            <a class="dropdown-item" href="'.route('group-fabric-color.manage_color', $row->id).'">จัดการสีผ้า</a>
+                            <a class="dropdown-item" href="#">แก้ไข</a>
+                            <a class="dropdown-item" href="#">ลบ</a>
+                        </div>
+                    </div>
+                </div>';
                 return $btn;
             })
             ->make(true);
@@ -91,5 +99,14 @@ class GroupFabricColorController extends Controller
             dd($th);
             return back()->with('error', 'Failed to update Group Fabric Color status.');
         }
+    }
+
+    /**
+     * Update the is_active status of the specified resource.
+     */
+    public function manageColor(string $id)
+    {
+        $groupFabricColor = GroupFabricColor::where('id', $id)->first();
+        return view('group_fabric_color.manage_color', compact('groupFabricColor'));
     }
 }
