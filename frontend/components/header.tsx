@@ -28,31 +28,31 @@ export default function Page() {
               href="/color-wheel"
               className="text-foreground/70 hover:text-foreground transition font-medium"
             >
-              วงจรสี
+              วงล้อสี / Color Wheel
             </Link>
             <Link
               href="/color-patterns"
               className="text-foreground/70 hover:text-foreground transition font-medium"
             >
-              แบบรูปสี
+              ลวดลาย / Color Patterns
             </Link>
             <Link
               href="/contrast-checker"
               className="text-foreground/70 hover:text-foreground transition font-medium"
             >
-              ตรวจความคม
+              เครื่องมือช่วยการเข้าถึง / Accessibility Tool
             </Link>
             <Link
               href="/about"
               className="text-foreground/70 hover:text-foreground transition font-medium"
             >
-              เกี่ยวกับเรา
+              สีผ้าทอ / Woven Colors
             </Link>
             <Link
               href="/contact"
               className="text-foreground/70 hover:text-foreground transition font-medium"
             >
-              ติดต่อเรา
+              ติดต่อเรา / Contact
             </Link>
 
             {/* <ModeToggle /> */}

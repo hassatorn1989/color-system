@@ -125,16 +125,16 @@ const page = () => {
                   <div className="mb-6">
                     <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-2">
                       {[
-                        { key: "monochromatic", label: "โมโนโครมาติก" },
-                        { key: "analogous", label: "อนาลอกัส" },
-                        { key: "complementary", label: "คอมพลีเมนทารี" },
+                        { key: "monochromatic", label: "สีเดี่ยว" },
+                        { key: "complementary", label: "สีคู่ตรงข้าม" },
+                        { key: "analogous", label: "สีข้างเคียง" },
+                        { key: "triadic", label: "สีสามเหลี่ยม" },
                         {
                           key: "split-complementary",
-                          label: "สปลิทคอมพลีเมนทารี",
+                          label: "สีตรงกันข้ามเยื้อง",
                         },
-                        { key: "triadic", label: "ไตรแอดิก" },
-                        { key: "tetradic", label: "เตตระดิก" },
-                        { key: "square", label: "สแควร์" },
+                        { key: "tetradic", label: "สีสี่เหลี่ยมผืนผ้า" },
+                        { key: "square", label: "สีสี่เหลี่ยมจัตุรัส" },
                       ].map((type) => (
                         <button
                           key={type.key}
@@ -146,6 +146,8 @@ const page = () => {
                           onClick={() => setHarmonyType(type.key)}
                         >
                           {type.label}
+                          <br />
+                          {type.key}
                         </button>
                       ))}
 
