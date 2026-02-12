@@ -23,7 +23,7 @@ class GroupFabricColor extends Model
     public $incrementing = false;
 
 
-    public function getSubFabricColors() {
-        return $this->hasMany(SubFabricColor::class, 'group_fabric_color_id', 'id')->where('is_active', true);
+    public function subFabricColors() {
+        return $this->hasMany(SubFabricColor::class, 'group_fabric_color_id', 'id');
     }
 }

@@ -17,9 +17,9 @@ class FabricColor extends Model
 
     protected $fillable = [
         'id',
+        'sub_fabric_color_id',
         'name',
         'hex_code',
-        'is_active',
         'created_at',
         'updated_at',
         'deleted_at',

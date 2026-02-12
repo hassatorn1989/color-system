@@ -84,7 +84,6 @@ function editData(id, name) {
         url: `/group-fabric-color/edit/${id}`,
         type: "GET",
         success: function (response) {
-            // if (response.status) {
                 $(".modal-title").text("Edit Group Fabric Color: " + name);
                 $("#form")[0].reset();
                 $(".form-control").removeClass("is-invalid");
@@ -92,7 +91,6 @@ function editData(id, name) {
                 $("#form").attr("action", `/group-fabric-color/update/${id}`);
                 $("#name").val(response.data.name);
                 $("#modal-default").modal("show");
-            // }
         }
     });
 }
@@ -110,12 +108,9 @@ function deleteData(id) {
         if (result.isConfirmed) {
             $.ajax({
                 url: `/group-fabric-color/destroy/${id}`,
-                type: "DELETE",
-                data: {
-                    _token: $("meta[name=csrf-token]").attr("content"),
-                },
+                type: "POST",
                 success: function (response) {
-                    if (response.status) {
+                    if (response.success) {
                         Swal.fire(
                             "Deleted!",
                             "Your group fabric color has been deleted.",

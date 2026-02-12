@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\GroupFabricColor;
+use App\Models\SubFabricColor;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\DataTables;
+
+use function Symfony\Component\String\s;
 
 class GroupFabricColorController extends Controller
 {
@@ -47,9 +50,9 @@ class GroupFabricColorController extends Controller
                         <i class="fas fa-cogs"></i> จัดการ
                         </button>
                         <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                            <a class="dropdown-item" href="'.route('group-fabric-color.manage_color', $row->id).'">จัดการสีผ้า</a>
-                            <a class="dropdown-item" href="#">แก้ไข</a>
-                            <a class="dropdown-item" href="#">ลบ</a>
+                            <a class="dropdown-item" href="'.route('group-fabric-color.manage_color', $row->id). '">จัดการสีผ้า</a>
+                            <a class="dropdown-item" href="#" onclick="editData(\''.$row->id.'\', \''.htmlspecialchars($row->name, ENT_QUOTES).'\')">แก้ไข</a>
+                            <a class="dropdown-item" href="#" onclick="deleteData(\''.$row->id.'\')">ลบ</a>
                         </div>
                     </div>
                 </div>';
@@ -57,6 +60,8 @@ class GroupFabricColorController extends Controller
             })
             ->make(true);
     }
+
+
 
     /**
      * Show the form for editing the specified resource.
@@ -86,19 +91,19 @@ class GroupFabricColorController extends Controller
      */
     public function destroy(string $id)
     {
-        DB::beginTransaction();
-        try {
+        DB::transaction(function () use ($id) {
+            // First, delete associated sub fabric colors and their fabric colors
             $groupFabricColor = GroupFabricColor::where('id', $id)->first();
-            $groupFabricColor->is_active = !$groupFabricColor->is_active;
-            $groupFabricColor->updated_at = now();
-            $groupFabricColor->save();
-            DB::commit();
-            return back()->with('success', 'Group Fabric Color status updated successfully.');
-        } catch (\Throwable $th) {
-            DB::rollBack();
-            dd($th);
-            return back()->with('error', 'Failed to update Group Fabric Color status.');
-        }
+            foreach ($groupFabricColor->subFabricColors as $subFabricColor) {
+                // Delete associated fabric colors
+                $subFabricColor->fabricColors()->delete();
+                // Delete the sub fabric color
+                $subFabricColor->delete();
+            }
+            // Finally, delete the group fabric color
+            $groupFabricColor->delete();
+        });
+        return response()->json(['success' => true, 'message' => 'Group Fabric Color deleted successfully.']);
     }
 
     /**
@@ -108,5 +113,76 @@ class GroupFabricColorController extends Controller
     {
         $groupFabricColor = GroupFabricColor::where('id', $id)->first();
         return view('group_fabric_color.manage_color', compact('groupFabricColor'));
+    }
+
+    function manageColorStore(Request $request, string $id)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'colors' => 'required|array',
+            'color_name' => 'required|array',
+            'colors.*' => 'required|string',
+            'color_name.*' => 'required|string|max:255',
+        ]);
+        DB::transaction(function () use ($validated, $id) {
+            $subFabricColor = SubFabricColor::create([
+                'name' => $validated['name'],
+                'group_fabric_color_id' => $id
+            ]);
+
+            foreach ($validated['colors'] as $index => $color) {
+                $subFabricColor->fabricColors()->create([
+                    'name' => $validated['color_name'][$index],
+                    'hex_code' => $color,
+                ]);
+            }
+        });
+        return back()->with('success', 'Sub Fabric Colors added successfully.');
+    }
+
+    function manageColorEdit(string $id)
+    {
+        $subFabricColor = SubFabricColor::with('fabricColors')->where('id', $id)->first();
+        return response()->json(['data' => $subFabricColor]);
+    }
+
+    function manageColorUpdate(Request $request, string $id)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'colors' => 'required|array',
+            'color_name' => 'required|array',
+            'colors.*' => 'required|string',
+            'color_name.*' => 'required|string|max:255',
+        ]);
+        DB::transaction(function () use ($validated, $id) {
+            $subFabricColor = SubFabricColor::where('id', $id)->first();
+            $subFabricColor->name = $validated['name'];
+            $subFabricColor->save();
+
+            // Delete existing fabric colors
+            $subFabricColor->fabricColors()->delete();
+
+            // Add updated fabric colors
+            foreach ($validated['colors'] as $index => $color) {
+                $subFabricColor->fabricColors()->create([
+                    'name' => $validated['color_name'][$index],
+                    'hex_code' => $color,
+                ]);
+            }
+        });
+        return back()->with('success', 'Sub Fabric Colors updated successfully.');
+    }
+
+    function manageColorDestroy(string $id)
+    {
+        DB::transaction(function () use ($id) {
+            $subFabricColor = SubFabricColor::where('id', $id)->first();
+            // Delete associated fabric colors
+            $subFabricColor->fabricColors()->delete();
+            // Delete the sub fabric color
+            $subFabricColor->delete();
+        });
+        return response()->json(['success' => true, 'message' => 'Sub Fabric Color deleted successfully.']);
     }
 }

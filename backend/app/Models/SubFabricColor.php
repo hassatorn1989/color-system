@@ -19,13 +19,13 @@ class SubFabricColor extends Model
     protected $fillable = [
         'id',
         'name',
-        'is_active',
+        'group_fabric_color_id',
         'created_at',
         'updated_at',
         'deleted_at',
     ];
 
-    public function getSubFabricColors() {
-        return $this->hasMany(FabricColor::class, 'sub_fabric_color_id', 'id')->where('is_active', true);
+    public function fabricColors() {
+        return $this->hasMany(FabricColor::class, 'sub_fabric_color_id', 'id');
     }
 }

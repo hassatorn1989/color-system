@@ -37,12 +37,54 @@
                             </div>
                             <div class="card-body">
                                 <div class="row">
-                                    <div class="col-md-3">
-                                        <button type="button" class="btn btn-info btn-sm mb-2" id="addNewButton">
+                                    <div class="col-md-3 offset-md-9">
+                                        <button type="button" class="btn btn-primary btn-block mb-2" id="addNewButton"
+                                            data-id="{{ $groupFabricColor->id }}">
                                             <i class="fas fa-plus mr-1"></i>
                                             <span class="btn-text">Add New</span>
                                         </button>
                                     </div>
+                                </div>
+
+                                <div class="row">
+                                    @if (count($groupFabricColor->subFabricColors) > 0)
+                                        @foreach ($groupFabricColor->subFabricColors as $subFabricColor)
+                                            <div class="col-md-3 mb-3">
+                                                <div class="card " style="width: 18rem;">
+                                                    <div class="card-header">
+                                                        <h5 class="card-title m-0">{{ $subFabricColor->name }}</h5>
+                                                    </div>
+                                                    <div class="card-body p-2">
+                                                        <div class="row g-2">
+                                                            @foreach ($subFabricColor->fabricColors as $item)
+                                                                <div class="col-4 mb-2">
+                                                                    <div class="color-box"
+                                                                        style="background-color: {{ $item->hex_code ?? '#eeeeee' }}; height: 40px; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.12);"
+                                                                        data-toggle="tooltip" data-placement="top"
+                                                                        title="Color {{ $item->hex_code ?? '#eeeeee' }}">
+                                                                    </div>
+                                                                </div>
+                                                            @endforeach
+                                                        </div>
+                                                    </div>
+                                                    <div class="card-footer bg-transparent text-right">
+                                                        <button class="btn btn-warning btn-sm"
+                                                            onclick="editData('{{ $subFabricColor->id }}')"><i
+                                                                class="fas fa-edit"></i> Edit</button>
+                                                        <button class="btn btn-danger btn-sm"
+                                                            onclick="deleteData('{{ $subFabricColor->id }}')"><i
+                                                                class="fas fa-trash"></i> Delete</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    @else
+                                        <div class="col-12">
+                                            <div class="alert alert-warning text-center" role="alert">
+                                                No colors found. Please add a new color group.
+                                            </div>
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
                             <!-- /.card-body -->
@@ -76,7 +118,7 @@
                         <hr>
                         <div class="color-container">
                         </div>
-                        <button type="button" class="btn btn-info btn-sm" id="addColorButton">
+                        <button type="button" class="btn btn-info btn-sm btn-block" id="addColorButton">
                             <i class="fas fa-plus mr-1"></i>
                             <span class="btn-text">Add Color</span>
                         </button>

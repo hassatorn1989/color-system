@@ -55,7 +55,7 @@
                 </li>
                 <li class="nav-item">
                     <a href="{{ route('group-fabric-color.index') }}" class="nav-link {{ request()->is('group-fabric-color') ? 'active' : '' }}">
-                        <i class="nav-icon fas fa-quidditch"></i>
+                        <i class="nav-icon fas fa-fill-drip"></i>
                         <p>
                             Group Fabric Color
                         </p>

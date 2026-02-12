@@ -84,6 +84,7 @@ const ColorHarmonyWheel = ({
       default:
         colors.push(hue);
     }
+    
     return colors;
   };
 
@@ -223,12 +224,6 @@ const ColorHarmonyWheel = ({
   if (!isMounted) return null;
 
   return (
-    // <div className="flex flex-col gap-6 sm:flex-row sm:gap-8 md:flex-row md:gap-12">
-    //     <div className="w-full">
-    //       {renderColorWheel()}
-    //     </div>
-    //     <ColorPattern harmonyColors={harmonyColors} baseColor={baseColor} harmonyType={harmonyType} />
-    //   </div>mb-6
     <>
       <div className="grid lg:grid-cols-2 gap-6 mt-8">
         {/* Interactive Wheel */}
@@ -247,28 +242,6 @@ const ColorHarmonyWheel = ({
               </SelectContent>
             </Select>
             <div className="flex justify-center mb-8">{renderColorWheel()}</div>
-
-            {/* Slider for wheel interaction */}
-            {/* <div className="space-y-3">
-              <Label className="text-foreground font-medium">หมุนวงจร</Label>
-              <input
-                type="range"
-                min="0"
-                max="330"
-                step="30"
-                value={selectedDegree}
-                onChange={(e) => setSelectedDegree(Number(e.target.value))}
-                className="w-full h-2 bg-border rounded-lg appearance-none cursor-pointer"
-                style={{
-                  background: `linear-gradient(to right, #EF4444 0%, #F97316 8%, #FB923C 16%, #FBBF24 25%, #BFDBFE 33%, #4ADE80 41%, #22D3EE 50%, #3B82F6 58%, #A855F7 66%, #EC4899 75%, #F472B6 83%, #FB7185 91%, #EF4444 100%)`,
-                }}
-              />
-              <div className="flex justify-between text-xs text-foreground/60">
-                <span>0°</span>
-                <span>180°</span>
-                <span>330°</span>
-              </div>
-            </div> */}
           </Card>
         </div>
 

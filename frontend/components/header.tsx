@@ -24,38 +24,21 @@ export default function Page() {
 
           {/* Desktop Menu - Updated menu text to Thai */}
           <div className="hidden md:flex gap-8">
-            <Link
-              href="/color-wheel"
+            {[
+              { href: "/color-wheel", label: "วงล้อสี / Color Wheel" },
+              { href: "/color-patterns", label: "ลวดลาย / Color Patterns" },
+              { href: "/contrast-checker", label: "เครื่องมือช่วยการเข้าถึง / Accessibility Tool" },
+              { href: "/about", label: "สีผ้าทอ / Woven Colors" },
+              { href: "/contact", label: "ติดต่อเรา / Contact" },
+            ].map((item) => (
+              <Link
+              key={item.href}
+              href={item.href}
               className="text-foreground/70 hover:text-foreground transition font-medium"
-            >
-              วงล้อสี / Color Wheel
-            </Link>
-            <Link
-              href="/color-patterns"
-              className="text-foreground/70 hover:text-foreground transition font-medium"
-            >
-              ลวดลาย / Color Patterns
-            </Link>
-            <Link
-              href="/contrast-checker"
-              className="text-foreground/70 hover:text-foreground transition font-medium"
-            >
-              เครื่องมือช่วยการเข้าถึง / Accessibility Tool
-            </Link>
-            <Link
-              href="/about"
-              className="text-foreground/70 hover:text-foreground transition font-medium"
-            >
-              สีผ้าทอ / Woven Colors
-            </Link>
-            <Link
-              href="/contact"
-              className="text-foreground/70 hover:text-foreground transition font-medium"
-            >
-              ติดต่อเรา / Contact
-            </Link>
-
-            {/* <ModeToggle /> */}
+              >
+              {item.label}
+              </Link>
+            ))}
           </div>
 
           {/* Mobile Menu Button */}

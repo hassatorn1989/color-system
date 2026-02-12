@@ -10,9 +10,9 @@ datasource db {
 }
 
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
   binaryTargets = ["native", "linux-musl"]
-  output   = "../lib/generated/prisma"
+  output        = "../lib/generated/prisma"
 }
 
 model Pattern {
@@ -42,15 +42,48 @@ model GroupColor {
 
 model Color {
   id             String    @id @default(uuid())
-  group_color_id String    
-  priority        Int
+  group_color_id String
+  priority       Int
   color          String
   is_active      Boolean   @default(true)
-  created_by     String    
+  created_by     String
   updated_by     String
   created_at     DateTime  @default(now())
   updated_at     DateTime  @updatedAt
   deleted_at     DateTime?
 
   @@map("color")
+}
+
+model GroupFabricColor {
+  id         String    @id @default(uuid())
+  name       String
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+  deleted_at DateTime?
+
+  @@map("group_fabric_colors")
+}
+
+model SubFabricColor {
+  id                    String    @id @default(uuid())
+  group_fabric_color_id String
+  name                  String
+  created_at            DateTime  @default(now())
+  updated_at            DateTime  @updatedAt
+  deleted_at            DateTime?
+
+  @@map("sub_fabric_colors")
+}
+
+model FabricColor {
+  id                  String    @id @default(uuid())
+  sub_fabric_color_id String
+  name                String
+  hex_code            String
+  created_at          DateTime  @default(now())
+  updated_at          DateTime  @updatedAt
+  deleted_at          DateTime?
+
+  @@map("fabric_colors")
 }

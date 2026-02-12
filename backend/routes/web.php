@@ -55,9 +55,14 @@ Route::middleware(['auth'])->group(function () {
         Route::post('show', [GroupFabricColorController::class, 'show'])->name('group-fabric-color.show');
         Route::get('edit/{id}', [GroupFabricColorController::class, 'edit'])->name('group-fabric-color.edit');
         Route::post('update/{id}', [GroupFabricColorController::class, 'update'])->name('group-fabric-color.update');
-        Route::post('update-is-active/{id}', [GroupFabricColorController::class, 'updateIsActive'])->name('group-fabric-color.update_is_active');
+        Route::post('destroy/{id}', [GroupFabricColorController::class, 'destroy'])->name('group-fabric-color.destroy');
 
         Route::get('manage-color/{id}', [GroupFabricColorController::class, 'manageColor'])->name('group-fabric-color.manage_color');
+        Route::post('manage-color/store/{id}', [GroupFabricColorController::class, 'manageColorStore'])->name('group-fabric-color.manage_color_store');
+        Route::get('manage-color/edit/{id}', [GroupFabricColorController::class, 'manageColorEdit'])->name('group-fabric-color.manage_color_edit');
+        Route::post('manage-color/show/{id}', [GroupFabricColorController::class, 'manageColorShow'])->name('group-fabric-color.manage_color_show');
+        Route::post('manage-color/update/{id}', [GroupFabricColorController::class, 'manageColorUpdate'])->name('group-fabric-color.manage_color_update');
+        Route::post('manage-color/destroy/{id}', [GroupFabricColorController::class, 'manageColorDestroy'])->name('group-fabric-color.manage_color_destroy');
     });
 
     // logout

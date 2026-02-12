@@ -147,144 +147,151 @@ export const ColorPattern: React.FC<ColorPatternProps> = ({
         const colorIndex = Math.floor(hue / 30) % 12;
         return baseColor[colorIndex];
       });
+      patterns.push(mainPattern);
 
-      if (mainPattern.length == 2) {
-        patterns.push(mainPattern); // A B
-        patterns.push([mainPattern[1], mainPattern[0]]); // B A
-      } else if (mainPattern.length == 3) {
-        patterns.push(mainPattern); // A B C
-        patterns.push([mainPattern[0], mainPattern[2], mainPattern[1]]); // A C B
-        patterns.push([mainPattern[1], mainPattern[0], mainPattern[2]]); // B A C
-        patterns.push([mainPattern[1], mainPattern[2], mainPattern[0]]); // B C A
-        patterns.push([mainPattern[2], mainPattern[0], mainPattern[1]]); // C A B
-        patterns.push([mainPattern[2], mainPattern[1], mainPattern[0]]); // C B A
-      } else if (mainPattern.length == 4) {
-        patterns.push(mainPattern); // A B C D
-        patterns.push([mainPattern[0], mainPattern[1], mainPattern[3], mainPattern[2]]); // A B D C
-        patterns.push([mainPattern[0], mainPattern[2], mainPattern[1], mainPattern[3]]); // A C B D
-        patterns.push([mainPattern[0], mainPattern[2], mainPattern[3], mainPattern[1]]); // A C D B
-        patterns.push([mainPattern[0], mainPattern[3], mainPattern[1], mainPattern[2]]); // A D B C
-        patterns.push([mainPattern[0], mainPattern[3], mainPattern[2], mainPattern[1]]); // A D C B
-        patterns.push([mainPattern[1], mainPattern[0], mainPattern[2], mainPattern[3]]); // B A C D
-        patterns.push([mainPattern[1], mainPattern[0], mainPattern[3], mainPattern[2]]); // B A D C
-        patterns.push([mainPattern[1], mainPattern[2], mainPattern[0], mainPattern[3]]); // B C A D
-        patterns.push([mainPattern[1], mainPattern[2], mainPattern[3], mainPattern[0]]); // B C D A
-        patterns.push([mainPattern[1], mainPattern[3], mainPattern[0], mainPattern[2]]); // B D A C
-        patterns.push([mainPattern[1], mainPattern[3], mainPattern[2], mainPattern[0]]); // B D C A
-        patterns.push([mainPattern[2], mainPattern[0], mainPattern[1], mainPattern[3]]); // C A B D
-        patterns.push([mainPattern[2], mainPattern[0], mainPattern[3], mainPattern[1]]); // C A D B
-        patterns.push([mainPattern[2], mainPattern[1], mainPattern[0], mainPattern[3]]); // C B A D
-        patterns.push([mainPattern[2], mainPattern[1], mainPattern[3], mainPattern[0]]); // C B D A
-        patterns.push([mainPattern[2], mainPattern[3], mainPattern[0], mainPattern[1]]); // C D A B
-        patterns.push([mainPattern[2], mainPattern[3], mainPattern[1], mainPattern[0]]); // C D B A
-        patterns.push([mainPattern[3], mainPattern[0], mainPattern[1], mainPattern[2]]); // D A B C
-        patterns.push([mainPattern[3], mainPattern[0], mainPattern[2], mainPattern[1]]); // D A C B
-        patterns.push([mainPattern[3], mainPattern[1], mainPattern[0], mainPattern[2]]); // D B A C
-        patterns.push([mainPattern[3], mainPattern[1], mainPattern[2], mainPattern[0]]); // D B C A
-        patterns.push([mainPattern[3], mainPattern[2], mainPattern[0], mainPattern[1]]); // D C A B
-        patterns.push([mainPattern[3], mainPattern[2], mainPattern[1], mainPattern[0]]); // D C B A
-      } 
       // สร้าง pattern หลากหลายด้วยการเลื่อนสีในหลายๆ องศา
-      // const shifts = [30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330];
+      const shifts = [30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330];
 
-      // shifts.forEach((shift) => {
-      //   const shiftedPattern = harmonyColors.map((hue) => {
-      //     const shiftedIndex = Math.floor((hue + shift) / 30) % 12;
-      //     return baseColor[shiftedIndex];
-      //   });
-      //   patterns.push(shiftedPattern);
-      // });
+      shifts.forEach((shift) => {
+        const shiftedPattern = harmonyColors.map((hue) => {
+          const shiftedIndex = Math.floor((hue + shift) / 30) % 12;
+          return baseColor[shiftedIndex];
+        });
+        patterns.push(shiftedPattern);
+      });
 
-      // // สร้าง patterns แบบ reverse order
-      // const reversePattern = [...mainPattern].reverse();
-      // patterns.push(reversePattern);
+      // สร้าง patterns แบบ reverse order
+      const reversePattern = [...mainPattern].reverse();
+      patterns.push(reversePattern);
 
-      // // สร้าง patterns แบบ alternate (สลับสี)
-      // if (harmonyColors.length >= 2) {
-      //   const alternatePattern1 = harmonyColors.map((hue, idx) => {
-      //     const shift = idx % 2 === 0 ? 45 : -45;
-      //     const shiftedIndex = Math.floor((hue + shift + 360) / 30) % 12;
-      //     return baseColor[shiftedIndex];
-      //   });
-      //   patterns.push(alternatePattern1);
+      // สร้าง patterns แบบ alternate (สลับสี)
+      if (harmonyColors.length >= 2) {
+        const alternatePattern1 = harmonyColors.map((hue, idx) => {
+          const shift = idx % 2 === 0 ? 45 : -45;
+          const shiftedIndex = Math.floor((hue + shift + 360) / 30) % 12;
+          return baseColor[shiftedIndex];
+        });
+        patterns.push(alternatePattern1);
 
-      //   const alternatePattern2 = harmonyColors.map((hue, idx) => {
-      //     const shift = idx % 2 === 0 ? 90 : -90;
-      //     const shiftedIndex = Math.floor((hue + shift + 360) / 30) % 12;
-      //     return baseColor[shiftedIndex];
-      //   });
-      //   patterns.push(alternatePattern2);
-      // }
+        const alternatePattern2 = harmonyColors.map((hue, idx) => {
+          const shift = idx % 2 === 0 ? 90 : -90;
+          const shiftedIndex = Math.floor((hue + shift + 360) / 30) % 12;
+          return baseColor[shiftedIndex];
+        });
+        patterns.push(alternatePattern2);
+      }
 
-      // // สร้าง patterns แบบ step progression
-      // for (let step = 15; step <= 75 && patterns.length < 19; step += 15) {
-      //   const stepPattern = harmonyColors.map((hue, idx) => {
-      //     const progression = step * idx;
-      //     const shiftedIndex = Math.floor((hue + progression) / 30) % 12;
-      //     return baseColor[shiftedIndex];
-      //   });
-      //   patterns.push(stepPattern);
-      // }
+      // สร้าง patterns แบบ step progression
+      for (let step = 15; step <= 75 && patterns.length < 19; step += 15) {
+        const stepPattern = harmonyColors.map((hue, idx) => {
+          const progression = step * idx;
+          const shiftedIndex = Math.floor((hue + progression) / 30) % 12;
+          return baseColor[shiftedIndex];
+        });
+        patterns.push(stepPattern);
+      }
 
-      // // สร้าง pattern สุดท้ายด้วยการผสมแบบ golden ratio
-      // if (patterns.length < 20) {
-      //   const goldenRatioPattern = harmonyColors.map((hue, idx) => {
-      //     const goldenShift = (idx * 137.5) % 360; // Golden angle
-      //     const shiftedIndex = Math.floor((hue + goldenShift) / 30) % 12;
-      //     return baseColor[shiftedIndex];
-      //   });
-      //   patterns.push(goldenRatioPattern);
-      // }
+      // สร้าง pattern สุดท้ายด้วยการผสมแบบ golden ratio
+      if (patterns.length < 20) {
+        const goldenRatioPattern = harmonyColors.map((hue, idx) => {
+          const goldenShift = (idx * 137.5) % 360; // Golden angle
+          const shiftedIndex = Math.floor((hue + goldenShift) / 30) % 12;
+          return baseColor[shiftedIndex];
+        });
+        patterns.push(goldenRatioPattern);
+      }
 
-      // // กรองสีที่ซ้ำออกและตรวจสอบให้แน่ใจว่ามี 20 patterns
-      // const uniquePatterns = [];
-      // const seenPatterns = new Set();
+      // กรองสีที่ซ้ำออกและตรวจสอบให้แน่ใจว่ามี 20 patterns
+      const uniquePatterns = [];
+      const seenPatterns = new Set();
 
-      // for (const pattern of patterns) {
-      //   const patternKey = JSON.stringify(pattern);
-      //   if (!seenPatterns.has(patternKey)) {
-      //     seenPatterns.add(patternKey);
-      //     uniquePatterns.push(pattern);
-      //     if (uniquePatterns.length >= 20) break;
-      //   }
-      // }
+      for (const pattern of patterns) {
+        const patternKey = JSON.stringify(pattern);
+        if (!seenPatterns.has(patternKey)) {
+          seenPatterns.add(patternKey);
+          uniquePatterns.push(pattern);
+          if (uniquePatterns.length >= 20) break;
+        }
+      }
 
-      // // หากยังไม่ครบ 20 ให้สร้างเพิ่ม (มี safety counter เพื่อป้องกัน infinite loop)
-      // let attempts = 0;
-      // const maxAttempts = 100;
+      // หากยังไม่ครบ 20 ให้สร้างเพิ่ม (มี safety counter เพื่อป้องกัน infinite loop)
+      let attempts = 0;
+      const maxAttempts = 100;
 
-      // while (uniquePatterns.length < 20 && attempts < maxAttempts) {
-      //   attempts++;
-      //   const randomShift = Math.floor(Math.random() * 360);
-      //   const randomPattern = harmonyColors.map((hue) => {
-      //     const shiftedIndex = Math.floor((hue + randomShift) / 30) % 12;
-      //     return baseColor[shiftedIndex];
-      //   });
+      while (uniquePatterns.length < 20 && attempts < maxAttempts) {
+        attempts++;
+        const randomShift = Math.floor(Math.random() * 360);
+        const randomPattern = harmonyColors.map((hue) => {
+          const shiftedIndex = Math.floor((hue + randomShift) / 30) % 12;
+          return baseColor[shiftedIndex];
+        });
 
-      //   const patternKey = JSON.stringify(randomPattern);
-      //   if (!seenPatterns.has(patternKey)) {
-      //     seenPatterns.add(patternKey);
-      //     uniquePatterns.push(randomPattern);
-      //   }
-      // }
+        const patternKey = JSON.stringify(randomPattern);
+        if (!seenPatterns.has(patternKey)) {
+          seenPatterns.add(patternKey);
+          uniquePatterns.push(randomPattern);
+        }
+      }
 
-      // // หากยังไม่ครบ 20 ให้เติมด้วย pattern ที่มีการ duplicate
-      // while (uniquePatterns.length < 20 && uniquePatterns.length > 0) {
-      //   const sourceIndex =
-      //     uniquePatterns.length % Math.min(uniquePatterns.length, 5);
-      //   const basePattern: string[] = uniquePatterns[sourceIndex];
-      //   if (basePattern && basePattern.length > 0) {
-      //     // uniquePatterns.push([...basePattern]);
-      //   } else {
-      //     break;
-      //   }
-      // }
+      // หากยังไม่ครบ 20 ให้เติมด้วย pattern ที่มีการ duplicate
+      while (uniquePatterns.length < 20 && uniquePatterns.length > 0) {
+        const sourceIndex =
+          uniquePatterns.length % Math.min(uniquePatterns.length, 5);
+        const basePattern: string[] = uniquePatterns[sourceIndex];
+        if (basePattern && basePattern.length > 0) {
+          uniquePatterns.push([...basePattern]);
+        } else {
+          break;
+        }
+      }
 
-      // return uniquePatterns.slice(0, 20);
+      return uniquePatterns.slice(0, 20);
     }
 
-    // return patterns.slice(0, 20);
-    return patterns;
+    return patterns.slice(0, 20);
+
+    // กรองสีที่ซ้ำออกและตรวจสอบให้แน่ใจว่ามี 20 patterns
+    // const uniquePatterns = [];
+    // const seenPatterns = new Set();
+
+    // for (const pattern of patterns) {
+    //   const patternKey = JSON.stringify(pattern);
+    //   if (!seenPatterns.has(patternKey)) {
+    //     seenPatterns.add(patternKey);
+    //     uniquePatterns.push(pattern);
+    //     if (uniquePatterns.length >= 20) break;
+    //   }
+    // }
+
+    // // หากยังไม่ครบ 20 ให้สร้างเพิ่ม (มี safety counter เพื่อป้องกัน infinite loop)
+    // let attempts = 0;
+    // const maxAttempts = 100;
+
+    // while (uniquePatterns.length < 20 && attempts < maxAttempts) {
+    //   attempts++;
+    //   const randomShift = Math.floor(Math.random() * 360);
+    //   const randomPattern = harmonyColors.map(hue => {
+    //     const shiftedIndex = Math.floor((hue + randomShift) / 30) % 12;
+    //     return baseColor[shiftedIndex];
+    //   });
+
+    //   const patternKey = JSON.stringify(randomPattern);
+    //   if (!seenPatterns.has(patternKey)) {
+    //     seenPatterns.add(patternKey);
+    //     uniquePatterns.push(randomPattern);
+    //   }
+    // }
+
+    // // หากยังไม่ครบ 20 ให้เติมด้วย pattern ที่มีการ duplicate
+    // while (uniquePatterns.length < 20 && uniquePatterns.length > 0) {
+    //   const sourceIndex = uniquePatterns.length % Math.min(uniquePatterns.length, 5);
+    //   const basePattern: string[] = uniquePatterns[sourceIndex];
+    //   if (basePattern && basePattern.length > 0) {
+    //     uniquePatterns.push([...basePattern]);
+    //   } else {
+    //     break;
+    //   }
+    // }
 
     // return uniquePatterns.slice(0, 20);
   }, [harmonyColors, baseColor, harmonyType]);
