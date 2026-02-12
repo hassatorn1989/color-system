@@ -228,7 +228,7 @@ const ColorHarmonyWheel = ({
       <div className="grid lg:grid-cols-2 gap-6 mt-8">
         {/* Interactive Wheel */}
         <div className="flex flex-col ">
-          <Card className="p-8 bg-card border-border w-full">
+          {/* <Card className="p-8 bg-card border-border w-full"> */}
             <Select value={groupColorId} onValueChange={selectColor}>
               <SelectTrigger className="w-full mb-6">
                 <SelectValue placeholder="Select a color" />
@@ -242,22 +242,22 @@ const ColorHarmonyWheel = ({
               </SelectContent>
             </Select>
             <div className="flex justify-center mb-8">{renderColorWheel()}</div>
-          </Card>
+          {/* </Card> */}
         </div>
 
         {/* Color Information */}
         <div className="space-y-6">
           {/* Selected Color Display */}
-          <Card className="overflow-hidden border-border">
+          {/* <Card className="overflow-hidden border-border"> */}
             <ColorPattern
               harmonyColors={harmonyColors}
               baseColor={baseColor}
               harmonyType={harmonyType}
             />
-          </Card>
+          {/* </Card> */}
 
           {/* Color Theory Info */}
-          <Card className="p-6 bg-card border-border">
+          {/* <Card className="p-6 bg-card border-border">
             <h4 className="text-lg font-semibold text-foreground mb-3">
               พื้นฐานทฤษฎีสี
             </h4>
@@ -283,7 +283,7 @@ const ColorHarmonyWheel = ({
                 </span>
               </li>
             </ul>
-          </Card>
+          </Card> */}
         </div>
       </div>
     </>
