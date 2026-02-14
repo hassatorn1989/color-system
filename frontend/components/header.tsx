@@ -27,8 +27,8 @@ export default function Page() {
             {[
               { href: "/color-wheel", label: "วงล้อสี / Color Wheel" },
               { href: "/color-patterns", label: "ลวดลาย / Color Patterns" },
+              { href: "/woven-colors", label: "สีผ้าทอ / Woven Colors" },
               { href: "/contrast-checker", label: "เครื่องมือช่วยการเข้าถึง / Accessibility Tool" },
-              { href: "/about", label: "สีผ้าทอ / Woven Colors" },
               { href: "/contact", label: "ติดต่อเรา / Contact" },
             ].map((item) => (
               <Link
