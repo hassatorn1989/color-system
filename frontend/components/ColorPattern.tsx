@@ -1,5 +1,5 @@
 "use client";
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Copy } from "lucide-react";
 interface ColorPatternProps {
   harmonyColors: number[];
@@ -13,6 +13,7 @@ export const ColorPattern: React.FC<ColorPatternProps> = ({
   harmonyType,
 }) => {
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
+  const [selectedPatternIndex, setSelectedPatternIndex] = useState(0);
 
   const copyToClipboard = async (
     colors: string[],
@@ -317,6 +318,13 @@ export const ColorPattern: React.FC<ColorPatternProps> = ({
     // return uniquePatterns.slice(0, 20);
   }, [harmonyColors, baseColor, harmonyType]);
 
+  useEffect(() => {
+    setSelectedPatternIndex(0);
+  }, [harmonyColors, baseColor, harmonyType]);
+
+  const selectedPattern =
+    colorPatterns.patterns[selectedPatternIndex] ?? colorPatterns.patterns[0] ?? [];
+
   const mixColors = (colors: string[]): string => {
     if (colors.length === 0) return "#000000";
     let r = 0,
@@ -461,7 +469,7 @@ export const ColorPattern: React.FC<ColorPatternProps> = ({
       {/* แถบสีใหญ่ด้านล่าง - แสดง pattern หลัก */}
       {colorPatterns.patterns.length > 0 && (
         <div className="flex">
-          {colorPatterns.patterns[0].map((color: string, colorIdx: number) => (
+          {selectedPattern.map((color: string, colorIdx: number) => (
             <div
               key={colorIdx}
               className="flex-1 h-10"
@@ -478,7 +486,7 @@ export const ColorPattern: React.FC<ColorPatternProps> = ({
       {/* Grid สำหรับ color patterns */}
       <div className="grid grid-cols-2 gap-2 mb-4">
         {colorPatterns.patterns.map((pattern, idx) => (
-          <div key={idx} className="relative group">
+          <div key={idx} className="rounded-lg border border-gray-200 p-2">
             <div className="flex rounded-lg overflow-hidden shadow-sm border border-gray-200">
               {pattern.map((color: string, colorIdx: number) => (
                 <div
@@ -493,31 +501,27 @@ export const ColorPattern: React.FC<ColorPatternProps> = ({
                 </div>
               ))}
             </div>
-            {/* ปุ่มคัดลอก */}
-            <div
-              className="cursor-pointer absolute inset-0 opacity-0 group-hover:opacity-100 bg-black/20 bg-opacity-50 flex items-center justify-center rounded-lg transition-opacity duration-200"
-              title="คัดลอกรหัสสี"
-            >
-              {copiedIndex === idx ? (
-                <span className="text-white text-xs font-medium bg-green-500 px-2 py-1 rounded">
-                  คัดลอกแล้ว!
-                </span>
-              ) : (
-                <div className="relative">
-                  <span className="text-white text-xs font-medium px-2 py-1 rounded flex items-center">
-                    <Copy
-                      className="w-4 h-4 inline-block mr-1"
-                      onClick={() => copyToClipboard(pattern, idx)}
-                    />
-                  </span>
-                  {/* <button
-                    onClick={() => copyToClipboard(pattern, idx)}
-                    className="absolute top-full left-0 mt-1 bg-white shadow-lg rounded-lg border border-gray-200 z-10 hidden group-hover:block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-max text-left cursor-pointer"
-                  >
-                    คัดลอก
-                  </button> */}
-                </div>
-              )}
+            <div className="mt-2 flex items-center gap-2">
+              <button
+                onClick={() => copyToClipboard(pattern, idx)}
+                className="inline-flex items-center rounded-md border border-gray-300 px-2 py-1 text-xs text-gray-700 hover:bg-gray-100"
+                title="Copy set"
+                type="button"
+              >
+                <Copy className="mr-1 h-3.5 w-3.5" />
+                {copiedIndex === idx ? "Copied" : "Copy set"}
+              </button>
+              <button
+                onClick={() => setSelectedPatternIndex(idx)}
+                className={`rounded-md border px-2 py-1 text-xs ${
+                  selectedPatternIndex === idx
+                    ? "border-blue-500 bg-blue-50 text-blue-700"
+                    : "border-gray-300 text-gray-700 hover:bg-gray-100"
+                }`}
+                type="button"
+              >
+                {selectedPatternIndex === idx ? "Using" : "Use pattern"}
+              </button>
             </div>
           </div>
         ))}
@@ -542,10 +546,10 @@ export const ColorPattern: React.FC<ColorPatternProps> = ({
                       style={{
                         height: `${pct * 2}px`,
                         backgroundColor:
-                          colorPatterns.patterns[0][pctIdx] || "#ffffff",
+                          selectedPattern[pctIdx] || "#ffffff",
                       }}
                       title={`${pct}% - ${
-                        colorPatterns.patterns[0][pctIdx] || "#ffffff"
+                        selectedPattern[pctIdx] || "#ffffff"
                       }`}
                     >
                       <span className="text-xs text-white font-medium px-2">

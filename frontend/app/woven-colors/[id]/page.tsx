@@ -168,11 +168,11 @@ export default function WovenColorDetailPage() {
                 </div>
               </section>
 
-              <section className="mt-6 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+              <section className="mt-6 grid grid-cols-1 gap-5">
                 {subFabricColors.map((subGroup) => (
                   <article
                     key={subGroup.id}
-                    className="rounded-2xl border border-border/70 bg-card/85 p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-lg"
+                    className="w-full rounded-2xl border border-border/70 bg-card/85 p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-lg"
                   >
                     <div className="mb-3 border-b border-border/60 pb-3">
                       <h2 className="text-lg font-semibold">{subGroup.name}</h2>
@@ -181,7 +181,7 @@ export default function WovenColorDetailPage() {
                       </p>
                     </div>
 
-                    <div className="space-y-3">
+                    <div className="flex flex-row flex-wrap gap-3">
                       {subGroup.fabricColors.length === 0 && (
                         <div className="rounded-lg border border-dashed border-border p-3 text-sm text-foreground/60">
                           ยังไม่มีรายการสีในหมวดย่อยนี้
@@ -193,7 +193,7 @@ export default function WovenColorDetailPage() {
                         return (
                           <div
                             key={color.id}
-                            className="rounded-xl border border-border/60 bg-background/70 p-3"
+                            className="min-w-[240px] flex-1 rounded-xl border border-border/60 bg-background/70 p-3"
                           >
                             <div className="flex items-center gap-3">
                               <span
