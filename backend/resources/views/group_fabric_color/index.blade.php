@@ -1,5 +1,5 @@
 @extends('layout.layout')
-@section('title', 'Group Fabric Color')
+@section('title', 'Woven Colors')
 @push('css')
 @endpush
 @push('js')
@@ -12,12 +12,12 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1 class="m-0">Group Fabric Color</h1>
+                        <h1 class="m-0">Woven Colors</h1>
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="#">Home</a></li>
-                            <li class="breadcrumb-item active">Group Fabric Color</li>
+                            <li class="breadcrumb-item active">Woven Colors</li>
                         </ol>
                     </div>
                 </div>
@@ -31,7 +31,7 @@
                         <div class="card">
                             <!-- /.card-header -->
                             <div class="card-header">
-                                <h3 class="card-title">Group Fabric Color</h3>
+                                <h3 class="card-title">Woven Colors</h3>
                             </div>
                             <div class="card-body">
                                 <div class="d-flex justify-content-end mb-3">
@@ -74,7 +74,7 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="dataModalLabel">Add New Group Fabric Color</h5>
+                        <h5 class="modal-title" id="dataModalLabel">Add New Woven Colors</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>

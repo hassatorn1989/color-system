@@ -37,7 +37,7 @@ var table = $("#datatables").DataTable({
 var card = $("#card");
 
 function addData() {
-    $(".modal-title").text("Add Group Fabric Color");
+    $(".modal-title").text("Add Woven Colors");
     $("#form")[0].reset();
     $(".form-control").removeClass("is-invalid");
     $(".invalid-feedback").remove();
@@ -84,7 +84,7 @@ function editData(id, name) {
         url: `/group-fabric-color/edit/${id}`,
         type: "GET",
         success: function (response) {
-                $(".modal-title").text("Edit Group Fabric Color: " + name);
+                $(".modal-title").text("Edit Woven Colors: " + name);
                 $("#form")[0].reset();
                 $(".form-control").removeClass("is-invalid");
                 $(".invalid-feedback").remove();
@@ -113,7 +113,7 @@ function deleteData(id) {
                     if (response.success) {
                         Swal.fire(
                             "Deleted!",
-                            "Your group fabric color has been deleted.",
+                            "Your Woven Colors has been deleted.",
                             "success"
                         ).then(() => {
                             location.reload();

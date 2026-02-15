@@ -57,7 +57,7 @@
                     <a href="{{ route('group-fabric-color.index') }}" class="nav-link {{ request()->is('group-fabric-color') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-fill-drip"></i>
                         <p>
-                            Group Fabric Color
+                            Woven Colors
                         </p>
                     </a>
                 </li>

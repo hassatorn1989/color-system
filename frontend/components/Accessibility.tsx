@@ -270,7 +270,7 @@ const Accessibility = () => {
             className={`shadow-2xl border-2 fixed right-8 top-18 bg-white max-w-[25vw] min-w-[25vw]`}
           >
             <div className=" w-full max-h-[72vh] overflow-auto accessibility-panel">
-              <CardHeader className="pb-4 accessibility-content">
+              <CardHeader className="pb-4">
                 <div className="flex items-center justify-between">
                   <CardTitle className="flex items-center gap-2">
                     <AccessibilityIcon className="h-5 w-5" />
@@ -288,7 +288,7 @@ const Accessibility = () => {
                 </div>
               </CardHeader>
               
-              <CardContent className="space-y-6 accessibility-content">
+              <CardContent className="space-y-6">
                 {/* Font Size */}
                 <div className="space-y-3">
                   <Label className="text-sm font-medium flex items-center gap-2">
@@ -657,8 +657,8 @@ const Accessibility = () => {
           letter-spacing: var(--accessibility-letter-spacing, 0) !important;
         }
         
-        /* Apply content scaling to only the content wrapper, not the main container or background */
-        .accessibility-content {
+        /* Apply content scaling to the whole app content wrapper */
+        .accessibility-app-root {
           zoom: var(--accessibility-zoom, 100%);
           -ms-zoom: var(--accessibility-zoom, 100%);
           -webkit-zoom: var(--accessibility-zoom, 100%);
@@ -667,10 +667,10 @@ const Accessibility = () => {
           width: 100%;
         }
           
-        
+
         /* Firefox support with transform instead of zoom */
         @supports (-moz-appearance: none) {
-          .accessibility-content {
+          .accessibility-app-root {
             transform: scale(var(--accessibility-content-scale, 1));
             transform-origin: top left;
             transition: transform 0.3s ease;

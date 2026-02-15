@@ -4,8 +4,13 @@
 // import Footer from "@/components/footer"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { useEffect } from "react"
 
 export default function AboutPage() {
+  useEffect(() => {
+    document.title = "เกี่ยวกับเรา - Sipator"
+  }, [])
+
   return (
     <div className="min-h-screen bg-background">
       {/* <Navigation /> */}

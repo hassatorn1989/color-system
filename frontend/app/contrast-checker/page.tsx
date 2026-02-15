@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 // import Navigation from "@/components/navigation"
 // import Footer from "@/components/footer"
 import { Card } from "@/components/ui/card"
@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
+import { Triangle, Square, Circle } from "lucide-react"
 
 const hexToRgb = (hex: string) => {
   const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex)
@@ -50,6 +51,10 @@ const getWcagLevel = (ratio: number) => {
 }
 
 export default function ContrastCheckerPage() {
+  useEffect(() => {
+    document.title = "ตรวจสอบความคมชัด - Sipator"
+  }, [])
+
   const [foreground, setForeground] = useState("#1F2937")
   const [background, setBackground] = useState("#F3F4F6")
 
@@ -154,6 +159,30 @@ export default function ContrastCheckerPage() {
                   <p className="text-sm">
                     สุนัขจิ้งจอกสีน้ำตาลที่รวดเร็วกระโดดข้ามสุนัขเกียจคร่านที่นอนหลับ
                   </p>
+                </div>
+              </Card>
+
+              {/* Shape Contrast Preview */}
+              <Card className="overflow-hidden border-border">
+                <div
+                  className="p-8 transition-all"
+                  style={{ color: foreground, backgroundColor: background }}
+                >
+                  <p className="text-sm mb-4 text-center">Icon contrast preview</p>
+                  <div className="flex items-center justify-center gap-8">
+                    <div className="flex flex-col items-center gap-2">
+                      <Triangle className="h-12 w-12" />
+                      <span className="text-xs">Triangle</span>
+                    </div>
+                    <div className="flex flex-col items-center gap-2">
+                      <Square className="h-12 w-12" />
+                      <span className="text-xs">Square</span>
+                    </div>
+                    <div className="flex flex-col items-center gap-2">
+                      <Circle className="h-12 w-12" />
+                      <span className="text-xs">Circle</span>
+                    </div>
+                  </div>
                 </div>
               </Card>
 

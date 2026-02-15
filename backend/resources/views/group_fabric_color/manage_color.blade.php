@@ -1,5 +1,5 @@
 @extends('layout.layout')
-@section('title', 'Group Fabric Color Management')
+@section('title', 'Woven Colors Management')
 @push('css')
 @endpush
 @push('js')
@@ -12,14 +12,14 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1 class="m-0">Group Fabric Color Management</h1>
+                        <h1 class="m-0">Woven Colors Management</h1>
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="{{ route('dashboard.index') }}">Dashboard</a></li>
                             <li class="breadcrumb-item"><a href="{{ route('group-fabric-color.index') }}">Group Fabric
                                     Color</a></li>
-                            <li class="breadcrumb-item active">Group Fabric Color Management</li>
+                            <li class="breadcrumb-item active">Woven Colors Management</li>
                         </ol>
                     </div>
                 </div>
@@ -104,7 +104,7 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="dataModalLabel">Add New Group Fabric Color</h5>
+                        <h5 class="modal-title" id="dataModalLabel">Add New Woven Colors</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>

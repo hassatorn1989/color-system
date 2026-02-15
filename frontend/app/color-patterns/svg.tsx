@@ -22,6 +22,7 @@ export function SvgComponents({ svg, foregroundColor, backgroundColor }: SvgComp
   );
   const customSvg = svg
     .replace(/fill=".*?"/g, `fill="${hexColor}"`)
+    .replace(/stroke=".*?"/g, `stroke="${hexColor}"`)
     .replace(/height=".*?"/g, 'height="50px"')
     .replace(/width=".*?"/g, 'width="50px"');
 

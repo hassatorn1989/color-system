@@ -1,8 +1,8 @@
 "use client";
-import React, { useState, useRef, useEffect } from "react";
+
+import React, { useEffect, useRef, useState } from "react";
 import { ColorPattern } from "./ColorPattern";
 import { Card } from "./ui/card";
-import { Label } from "./ui/label";
 import {
   Select,
   SelectContent,
@@ -10,7 +10,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
-// import { GroupColor } from "@/lib/generated/prisma/wasm";
 
 interface GroupColor {
   id: string;
@@ -66,35 +65,19 @@ const ColorHarmonyWheel = ({
         colors.push(hue, (hue + 120) % 360, (hue + 240) % 360);
         break;
       case "tetradic":
-        colors.push(
-          hue,
-          (hue + 60) % 360,
-          (hue + 180) % 360,
-          (hue + 240) % 360
-        );
+        colors.push(hue, (hue + 60) % 360, (hue + 180) % 360, (hue + 240) % 360);
         break;
       case "square":
-        colors.push(
-          hue,
-          (hue + 90) % 360,
-          (hue + 180) % 360,
-          (hue + 270) % 360
-        );
+        colors.push(hue, (hue + 90) % 360, (hue + 180) % 360, (hue + 270) % 360);
         break;
       default:
         colors.push(hue);
     }
-    
     return colors;
   };
 
-  const handleMouseDown = () => {
-    setIsDragging(true);
-  };
-
-  const handleMouseUp = () => {
-    setIsDragging(false);
-  };
+  const handleMouseDown = () => setIsDragging(true);
+  const handleMouseUp = () => setIsDragging(false);
 
   const handleMouseMove = (e: React.MouseEvent<SVGSVGElement>) => {
     if (!isDragging && e.type !== "click") return;
@@ -105,7 +88,6 @@ const ColorHarmonyWheel = ({
     const rect = svg.getBoundingClientRect();
     const centerX = rect.width / 2;
     const centerY = rect.height / 2;
-
     const x = e.clientX - rect.left - centerX;
     const y = e.clientY - rect.top - centerY;
 
@@ -128,7 +110,7 @@ const ColorHarmonyWheel = ({
         width="100%"
         height="100%"
         viewBox="0 0 500 500"
-        className="cursor-pointer max-w-[500px] max-h-[500px] w-full h-auto"
+        className="h-auto max-h-[500px] w-full max-w-[500px] cursor-pointer"
         onMouseDown={handleMouseDown}
         onMouseUp={handleMouseUp}
         onMouseMove={handleMouseMove}
@@ -138,11 +120,9 @@ const ColorHarmonyWheel = ({
           onSendData(harmonyColors);
         }}
       >
-        {/* 12 color segments */}
         {Array.from({ length: segments }).map((_, i) => {
           const startAngle = (i * 30 - 90) * (Math.PI / 180);
           const endAngle = ((i + 1) * 30 - 90) * (Math.PI / 180);
-
           const x1 = centerX + radius * Math.cos(startAngle);
           const y1 = centerY + radius * Math.sin(startAngle);
           const x2 = centerX + radius * Math.cos(endAngle);
@@ -159,7 +139,6 @@ const ColorHarmonyWheel = ({
           );
         })}
 
-        {/* Harmony indicators */}
         {harmonyColors.map((hue, idx) => {
           const angle = (hue - 90) * (Math.PI / 180);
           const markerRadius = radius + 20;
@@ -172,32 +151,21 @@ const ColorHarmonyWheel = ({
                 cx={x}
                 cy={y}
                 r="13"
-                // fill={`hsl(${hue}, 100%, 50%)`}
                 fill={baseColor[Math.floor(hue / 30) % 12]}
                 stroke="white"
                 strokeWidth="3"
                 className="cursor-pointer"
               />
-              {idx === 0 && (
-                <circle
-                  cx={x}
-                  cy={y}
-                  r="6"
-                  fill="white"
-                  className="pointer-events-none"
-                />
-              )}
+              {idx === 0 && <circle cx={x} cy={y} r="6" fill="white" className="pointer-events-none" />}
             </g>
           );
         })}
 
-        {/* Lines connecting harmony colors */}
         {harmonyColors.length > 1 &&
           harmonyColors.map((hue, idx) => {
             const nextHue = harmonyColors[(idx + 1) % harmonyColors.length];
             const angle1 = (hue - 90) * (Math.PI / 180);
             const angle2 = (nextHue - 90) * (Math.PI / 180);
-
             const x1 = centerX + (radius - 10) * Math.cos(angle1);
             const y1 = centerY + (radius - 10) * Math.sin(angle1);
             const x2 = centerX + (radius - 10) * Math.cos(angle2);
@@ -224,69 +192,36 @@ const ColorHarmonyWheel = ({
   if (!isMounted) return null;
 
   return (
-    <>
-      <div className="grid lg:grid-cols-2 gap-6 mt-8">
-        {/* Interactive Wheel */}
-        <div className="flex flex-col ">
-          {/* <Card className="p-8 bg-card border-border w-full"> */}
+    <div className="grid gap-6 lg:grid-cols-2">
+      <Card className="overflow-hidden border-border/70 bg-card/85 p-5 backdrop-blur">
+        <div className="rounded-xl border border-border/60 bg-background/70 p-4">
             <Select value={groupColorId} onValueChange={selectColor}>
-              <SelectTrigger className="w-full mb-6">
-                <SelectValue placeholder="Select a color" />
-              </SelectTrigger>
-              <SelectContent>
-                {groupColor.map((groupColor, index) => (
-                  <SelectItem key={index} value={groupColor.id}>
-                    {groupColor.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
+            <SelectTrigger className="w-full mb-5 h-11 border-border/70 bg-background/80">
+              <SelectValue placeholder="Select color set" />
+            </SelectTrigger>
+            <SelectContent>
+              {groupColor.map((item) => (
+              <SelectItem key={item.id} value={item.id}>
+                {item.name}
+              </SelectItem>
+              ))}
+            </SelectContent>
             </Select>
-            <div className="flex justify-center mb-8">{renderColorWheel()}</div>
-          {/* </Card> */}
-        </div>
 
-        {/* Color Information */}
-        <div className="space-y-6">
-          {/* Selected Color Display */}
-          {/* <Card className="overflow-hidden border-border"> */}
-            <ColorPattern
-              harmonyColors={harmonyColors}
-              baseColor={baseColor}
-              harmonyType={harmonyType}
-            />
-          {/* </Card> */}
-
-          {/* Color Theory Info */}
-          {/* <Card className="p-6 bg-card border-border">
-            <h4 className="text-lg font-semibold text-foreground mb-3">
-              พื้นฐานทฤษฎีสี
-            </h4>
-            <ul className="space-y-2 text-foreground/70 text-sm">
-              <li className="flex gap-2">
-                <span className="text-primary font-bold">•</span>
-                <span>
-                  <strong>สีหลัก:</strong> สีแดง สีเหลือง สีน้ำเงิน -
-                  ไม่สามารถผสมจากสีอื่น
-                </span>
-              </li>
-              <li className="flex gap-2">
-                <span className="text-accent font-bold">•</span>
-                <span>
-                  <strong>สีรอง:</strong> สีส้ม สีเขียว สีม่วง -
-                  ทำจากผสมสีหลักสองสี
-                </span>
-              </li>
-              <li className="flex gap-2">
-                <span className="text-secondary font-bold">•</span>
-                <span>
-                  <strong>สีทุติยภูมิ:</strong> ทำจากผสมสีหลักและสีรอง
-                </span>
-              </li>
-            </ul>
-          </Card> */}
+          <div className="relative flex justify-center rounded-xl border border-border/60 bg-[radial-gradient(circle_at_20%_20%,rgba(255,255,255,0.3),transparent_40%),radial-gradient(circle_at_80%_0%,rgba(0,127,255,0.18),transparent_40%)] p-4">
+            {renderColorWheel()}
+          </div>
         </div>
-      </div>
-    </>
+      </Card>
+
+      <Card className="border-border/70 bg-card/85 p-5 backdrop-blur">
+        <ColorPattern
+          harmonyColors={harmonyColors}
+          baseColor={baseColor}
+          harmonyType={harmonyType}
+        />
+      </Card>
+    </div>
   );
 };
 

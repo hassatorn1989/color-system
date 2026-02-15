@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 // import Navigation from "@/components/navigation"
 // import Footer from "@/components/footer"
 import { Card } from "@/components/ui/card"
@@ -13,6 +13,10 @@ import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
 
 export default function ContactPage() {
+  useEffect(() => {
+    document.title = "ติดต่อเรา - Sipator"
+  }, [])
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",

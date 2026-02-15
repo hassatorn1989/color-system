@@ -16,12 +16,10 @@ export const ColorPattern: React.FC<ColorPatternProps> = ({
 
   const copyToClipboard = async (
     colors: string[],
-    index: number,
-    type: "background" | "foreground",
+    index: number
   ) => {
     try {
-      const colorString =
-        type === "background" ? `${colors.join(", ")}` : `${colors.join(", ")}`;
+      const colorString = `${colors.join(", ")}`;
       if (navigator.clipboard && navigator.clipboard.writeText) {
         await navigator.clipboard.writeText(colorString);
       } else {
@@ -35,12 +33,7 @@ export const ColorPattern: React.FC<ColorPatternProps> = ({
       }
       setCopiedIndex(index);
       setTimeout(() => setCopiedIndex(null), 2000);
-      localStorage.setItem(
-        type === "background"
-          ? "copiedBackgroundColors"
-          : "copiedForegroundColors",
-        colorString,
-      );
+      localStorage.setItem("copiedForegroundColors", colorString);
     } catch (err) {
       console.error("Failed to copy colors: ", err);
     }
@@ -515,24 +508,12 @@ export const ColorPattern: React.FC<ColorPatternProps> = ({
                   <span className="text-white text-xs font-medium px-2 py-1 rounded flex items-center">
                     <Copy className="w-4 h-4 inline-block mr-1" />
                   </span>
-                  <div className="absolute top-full left-0 mt-1 bg-white shadow-lg rounded-lg border border-gray-200 z-10 hidden group-hover:block">
-                    <div
-                      onClick={() =>
-                        copyToClipboard(pattern, idx, "background")
-                      }
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left cursor-pointer"
-                    >
-                      คัดลอกเป็น Background
-                    </div>
-                    <div
-                      onClick={() =>
-                        copyToClipboard(pattern, idx, "foreground")
-                      }
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left cursor-pointer"
-                    >
-                      คัดลอกเป็น Foreground
-                    </div>
-                  </div>
+                  <button
+                    onClick={() => copyToClipboard(pattern, idx)}
+                    className="absolute top-full left-0 mt-1 bg-white shadow-lg rounded-lg border border-gray-200 z-10 hidden group-hover:block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-max text-left cursor-pointer"
+                  >
+                    คัดลอก
+                  </button>
                 </div>
               )}
             </div>

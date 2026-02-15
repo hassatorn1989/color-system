@@ -423,7 +423,7 @@ export const ColorPattern: React.FC<ColorPatternProps> = ({
                       }
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left cursor-pointer"
                     >
-                      คัดลอกเป็น Foreground
+                      คัดลอก
                     </div>
                   </div>
                 </div>

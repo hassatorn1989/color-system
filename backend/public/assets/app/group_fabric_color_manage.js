@@ -9,7 +9,7 @@ $('#addNewButton').on('click', function() {
 
     // Add initial color input
     addColorInput();
-    $(".modal-title").text("Add Group Fabric Color");
+    $(".modal-title").text("Add Woven Colors");
     $("#form")[0].reset();
     $(".form-control").removeClass("is-invalid");
     $(".invalid-feedback").remove();
@@ -105,7 +105,7 @@ $("#form").validate({
 });
 
 function editData(id) {
-    $(".modal-title").text("Edit Group Fabric Color");
+    $(".modal-title").text("Edit Woven Colors");
     $("#form")[0].reset();
     $(".form-control").removeClass("is-invalid");
     $(".invalid-feedback").remove();

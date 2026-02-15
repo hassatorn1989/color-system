@@ -32,7 +32,7 @@ class GroupFabricColorController extends Controller
             'name' => $validated['name'],
             'is_active' => true,
         ]);
-        return back()->with('success', 'Group Fabric Color created successfully.');
+        return back()->with('success', 'Woven Colors created successfully.');
     }
 
     /**
@@ -47,12 +47,12 @@ class GroupFabricColorController extends Controller
                 $btn = '<div class="btn-group" role="group" aria-label="Button group with nested dropdown">
                     <div class="btn-group" role="group">
                         <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle btn-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="fas fa-cogs"></i> จัดการ
+                        <i class="fas fa-cogs"></i> Manage
                         </button>
                         <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                            <a class="dropdown-item" href="'.route('group-fabric-color.manage_color', $row->id). '">จัดการสีผ้า</a>
-                            <a class="dropdown-item" href="#" onclick="editData(\''.$row->id.'\', \''.htmlspecialchars($row->name, ENT_QUOTES).'\')">แก้ไข</a>
-                            <a class="dropdown-item" href="#" onclick="deleteData(\''.$row->id.'\')">ลบ</a>
+                            <a class="dropdown-item" href="'.route('group-fabric-color.manage_color', $row->id). '">Manage Colors</a>
+                            <a class="dropdown-item" href="#" onclick="editData(\''.$row->id.'\', \''.htmlspecialchars($row->name, ENT_QUOTES).'\')">Edit</a>
+                            <a class="dropdown-item" href="#" onclick="deleteData(\''.$row->id.'\')">Delete</a>
                         </div>
                     </div>
                 </div>';
@@ -83,7 +83,7 @@ class GroupFabricColorController extends Controller
         GroupFabricColor::where('id', $id)->update([
             'name' => $validated['name'],
         ]);
-        return back()->with('success', 'Group Fabric Color updated successfully.');
+        return back()->with('success', 'Woven Colors updated successfully.');
     }
 
     /**
@@ -100,10 +100,10 @@ class GroupFabricColorController extends Controller
                 // Delete the sub fabric color
                 $subFabricColor->delete();
             }
-            // Finally, delete the group fabric color
+            // Finally, delete the Woven Colors
             $groupFabricColor->delete();
         });
-        return response()->json(['success' => true, 'message' => 'Group Fabric Color deleted successfully.']);
+        return response()->json(['success' => true, 'message' => 'Woven Colors deleted successfully.']);
     }
 
     /**
