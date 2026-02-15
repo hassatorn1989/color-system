@@ -469,7 +469,6 @@ export const ColorPattern: React.FC<ColorPatternProps> = ({
               title={color}
             />
           ))}
-
         </div>
       )}
       <h2 className="text-lg font-bold mb-4 text-gray-800 mt-6">
@@ -488,9 +487,9 @@ export const ColorPattern: React.FC<ColorPatternProps> = ({
                   style={{ backgroundColor: color }}
                   title={color}
                 >
-                  <span className="text-xs text-white font-medium px-2">
+                  {/* <span className="text-xs text-white font-medium px-2">
                     {hexToColorName(color)}
-                  </span>
+                  </span> */}
                 </div>
               ))}
             </div>
@@ -506,14 +505,17 @@ export const ColorPattern: React.FC<ColorPatternProps> = ({
               ) : (
                 <div className="relative">
                   <span className="text-white text-xs font-medium px-2 py-1 rounded flex items-center">
-                    <Copy className="w-4 h-4 inline-block mr-1" />
+                    <Copy
+                      className="w-4 h-4 inline-block mr-1"
+                      onClick={() => copyToClipboard(pattern, idx)}
+                    />
                   </span>
-                  <button
+                  {/* <button
                     onClick={() => copyToClipboard(pattern, idx)}
                     className="absolute top-full left-0 mt-1 bg-white shadow-lg rounded-lg border border-gray-200 z-10 hidden group-hover:block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-max text-left cursor-pointer"
                   >
                     คัดลอก
-                  </button>
+                  </button> */}
                 </div>
               )}
             </div>
@@ -547,10 +549,10 @@ export const ColorPattern: React.FC<ColorPatternProps> = ({
                       }`}
                     >
                       <span className="text-xs text-white font-medium px-2">
-                        {hexToColorName(
+                        {/* {hexToColorName(
                           colorPatterns.patterns[0][pctIdx] || "#ffffff",
-                        )}{" "}
-                        ({pct}%)
+                        )}{" "} */}
+                        {pct}%
                       </span>
                     </div>
                   ))}
