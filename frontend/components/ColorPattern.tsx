@@ -301,10 +301,10 @@ export const ColorPattern: React.FC<ColorPatternProps> = ({
           mainPattern[0],
         ]); // D C B A
         percentagePatterns.push(
-          [40, 30, 20, 10],
-          [30, 30, 20, 20],
-          [25, 25, 25, 25],
-          [10, 20, 30, 40],
+          [60, 20, 10, 10],
+          [70, 10, 10, 10],
+          [50, 20, 20, 10],
+          [40, 20, 20, 20],
         );
       }
 
@@ -538,7 +538,7 @@ export const ColorPattern: React.FC<ColorPatternProps> = ({
                   {percentages.map((pct, pctIdx) => (
                     <div
                       key={pctIdx}
-                      className="w-full mb-1 px-2 flex items-center"
+                      className="w-full  px-2 flex items-center"
                       style={{
                         height: `${pct * 2}px`,
                         backgroundColor:
