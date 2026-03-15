@@ -32,8 +32,9 @@ export default function Footer() {
               </span>
             </Link>
             <p className="mt-3 max-w-lg text-sm leading-relaxed text-foreground/70">
-              พื้นที่ทำงานด้านสีสำหรับสำรวจความกลมกลืนของสี พาเลตต์ผ้าทอ
-              และการผสมสีที่เข้าถึงได้สำหรับทุกคน
+              เว็บไซต์ที่ช่วยในการจับคู่สีผ้าทอจังหวัดพิษณุโลก
+              โดยสํารวจจากสีที่นิยมใช้ย้อมเส้นด้ายแต่ละชนิดมาใช้
+              ร่วมกับทฤษฎีการจับคู่สีเพื่อให้งานออกแบบผ้าทอเป็นเรื่องง่ายสำหรับทุกคน
             </p>
             <div className="mt-4 inline-flex items-center gap-2 rounded-xl border border-border/70 bg-background/70 px-3 py-2 text-sm text-foreground/70">
               <Sparkles className="h-4 w-4 text-accent" />

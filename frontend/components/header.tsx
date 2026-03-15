@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
@@ -9,14 +10,15 @@ import { ModeToggle } from "./mode-toggle";
 
 const navItems = [
   { href: "/color-wheel", th: "วงล้อสี", en: "Color Wheel" },
-  { href: "/color-patterns", th: "แบบรูปสี", en: "Color Patterns" },
+  { href: "/color-patterns", th: "ออกแบบลวดลาย", en: "Pattern Design" },
   { href: "/woven-colors", th: "สีผ้าทอ", en: "Woven Colors" },
+  { href: "/pixel-art", th: "วาดลายพิกเซล", en: "Pixel Art" },
   {
     href: "/contrast-checker",
-    th: "เครื่องมือการเข้าถึง",
+    th: "เครื่องมือช่วยการเข้าถึง",
     en: "Accessibility Tool",
   },
-  { href: "/contact", th: "ติดต่อเรา", en: "Contact" },
+  { href: "/contact", th: "สอบถามข้อมูลเพิ่มเติม", en: "Contact" },
 ];
 
 export default function Header() {
@@ -32,15 +34,17 @@ export default function Header() {
     const onScroll = () => {
       setIsScrolled(window.scrollY > 8);
     };
+
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
+
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   return (
     <header className="fixed inset-x-0 top-0 z-50 px-4 pt-4">
       <nav
-        className={`mx-auto flex h-16 w-full max-w-7xl items-center justify-between rounded-2xl border px-4 transition-all duration-300 ${
+        className={`mx-auto flex min-h-16 w-full max-w-7xl items-center justify-between rounded-2xl border px-4 py-2 transition-all duration-300 ${
           isScrolled
             ? "border-border/80 bg-background/65 shadow-xl shadow-black/10 backdrop-blur-2xl"
             : "border-border/70 bg-background/80 shadow-lg shadow-black/5 backdrop-blur-xl"
@@ -50,18 +54,24 @@ export default function Header() {
           href="/"
           title="ระบบสีผ้าทอจังหวัดพิษณุโลก"
           aria-label="ระบบสีผ้าทอจังหวัดพิษณุโลก"
-          className="inline-flex items-center gap-2 rounded-lg px-2 py-1 transition hover:bg-muted/70"
+          className="inline-flex items-center gap-3 rounded-lg px-2 py-1 transition hover:bg-muted/70"
         >
-          <span className="h-2.5 w-2.5 rounded-full bg-gradient-to-r from-primary via-secondary to-accent" />
-          <span className="bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-xl font-black tracking-tight text-transparent">
-            Sipator
-          </span>
+          <Image
+            src="/Logo.jpg"
+            alt="Sipator logo"
+            width={135}
+            height={36}
+            className="h-9 w-auto object-contain"
+            priority
+          />
+          <span className="sr-only">Sipator</span>
         </Link>
 
         <div className="hidden items-center gap-1 lg:flex">
           {navItems.map((item) => {
             const isActive =
               pathname === item.href || pathname.startsWith(`${item.href}/`);
+
             return (
               <Link
                 key={item.href}
@@ -93,7 +103,7 @@ export default function Header() {
             variant="ghost"
             size="icon"
             className="lg:hidden"
-            onClick={() => setIsOpen((prev) => !prev)}
+            onClick={() => setIsOpen((previous) => !previous)}
             aria-label="Toggle menu"
           >
             {isOpen ? <X size={20} /> : <Menu size={20} />}
@@ -107,6 +117,7 @@ export default function Header() {
             {navItems.map((item) => {
               const isActive =
                 pathname === item.href || pathname.startsWith(`${item.href}/`);
+
               return (
                 <Link
                   key={item.href}
