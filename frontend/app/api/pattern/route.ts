@@ -4,6 +4,7 @@ import { NextResponse } from "next/server";
 import fs from "fs";
 import path from "path";
 import axios from "axios";
+import { extractSvgMarkup } from "@/lib/svg-utils";
 const prisma = new PrismaClient();
 
 
@@ -17,7 +18,7 @@ function convertSVGtoString(url: string, filePath: string): Promise<string> {
       }
       fs.writeFileSync(filePath, response.data);
       // อ่านไฟล์ SVG และแปลงเป็น string
-      return fs.readFileSync(filePath, "utf-8");
+      return extractSvgMarkup(fs.readFileSync(filePath, "utf-8")) ?? "";
     })
     .catch((error) => {
       if (error.response && error.response.status === 404) {
@@ -57,7 +58,7 @@ export async function GET() {
     );
 
     return NextResponse.json({
-      patternsWithSVG,
+      patternsWithSVG: patternsWithSVG.filter((pattern) => pattern.svg),
     });
   } catch (error) {
     console.error("Error fetching patterns:", error);
@@ -81,7 +82,15 @@ export async function POST(request: Request) {
     }
     // convert file to <svg>
     
-    const svgContent = await file.text();
+    const svgContent = extractSvgMarkup(await file.text());
+    if (!svgContent) {
+      return NextResponse.json(
+        {
+          error: "Uploaded file does not contain valid SVG markup",
+        },
+        { status: 400 }
+      );
+    }
     return NextResponse.json({
       message: "Pattern created successfully",
       svg: svgContent, // ส่ง svg กลับไป

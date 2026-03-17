@@ -9,8 +9,10 @@ import {
   PaintBucket,
   Pencil,
   Plus,
+  RefreshCcw,
   RotateCcw,
   Trash2,
+  Undo2,
   Upload,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -39,22 +41,30 @@ const DEFAULT_COLORS = [
 ] as const;
 
 const PALETTE_PRESETS = [
-  { name: "ไหมคราม", primary: "#1D4ED8", accent: "#E0E7FF" },
+  { name: "คราม", primary: "#1D4ED8", accent: "#E0E7FF" },
   { name: "ดินเผา", primary: "#C2410C", accent: "#FFEDD5" },
-  { name: "ป่าเขา", primary: "#3F6212", accent: "#ECFCCB" },
-  { name: "กลีบบัว", primary: "#BE185D", accent: "#FCE7F3" },
+  { name: "พนา", primary: "#3F6212", accent: "#ECFCCB" },
+  { name: "กลีบดอก", primary: "#BE185D", accent: "#FCE7F3" },
 ] as const;
 
 const MIN_BOARD_SIZE = 4;
 const MAX_BOARD_SIZE = 64;
 const MIN_PIXEL_SIZE = 10;
 const MAX_PIXEL_SIZE = 36;
+const COPIED_PALETTE_KEY = "copiedForegroundColors";
 const TRANSPARENT_PATTERN =
   "linear-gradient(45deg, rgba(148,163,184,0.28) 25%, transparent 25%, transparent 75%, rgba(148,163,184,0.28) 75%, rgba(148,163,184,0.28)), linear-gradient(45deg, rgba(148,163,184,0.28) 25%, transparent 25%, transparent 75%, rgba(148,163,184,0.28) 75%, rgba(148,163,184,0.28))";
 
 type Tool = "pencil" | "eraser" | "fill";
 type PixelCell = string;
 type PixelGrid = PixelCell[][];
+type EditorSnapshot = {
+  rows: number;
+  cols: number;
+  pixelSize: number;
+  projectName: string;
+  grid: PixelGrid;
+};
 
 function clamp(value: number, min: number, max: number) {
   return Math.max(min, Math.min(max, value));
@@ -64,6 +74,24 @@ function makeGrid(rows: number, cols: number): PixelGrid {
   return Array.from({ length: rows }, () =>
     Array.from({ length: cols }, () => "transparent")
   );
+}
+
+function cloneGrid(grid: PixelGrid): PixelGrid {
+  return grid.map((row) => [...row]);
+}
+
+function parseCopiedPalette(value: string | null): string[] {
+  if (!value) return [];
+
+  return [
+    ...new Set(
+      value
+        .split(",")
+        .map((item) => item.trim())
+        .filter((item) => /^#[0-9a-fA-F]{6}$/.test(item))
+        .map((item) => item.toUpperCase())
+    ),
+  ];
 }
 
 function sanitizeColor(value: unknown): PixelCell {
@@ -141,6 +169,12 @@ export default function PixelArtPage() {
   const [showGrid, setShowGrid] = useState(true);
   const [grid, setGrid] = useState<PixelGrid>(() => makeGrid(36, 36));
   const [isDrawing, setIsDrawing] = useState(false);
+  const [history, setHistory] = useState<EditorSnapshot[]>([]);
+  const [copiedPalette, setCopiedPalette] = useState<string[]>([]);
+
+  const syncCopiedPalette = () => {
+    setCopiedPalette(parseCopiedPalette(window.localStorage.getItem(COPIED_PALETTE_KEY)));
+  };
 
   useEffect(() => {
     document.title = "วาดลายพิกเซล - Sipator";
@@ -157,6 +191,17 @@ export default function PixelArtPage() {
     };
   }, []);
 
+  useEffect(() => {
+    syncCopiedPalette();
+    window.addEventListener("focus", syncCopiedPalette);
+    window.addEventListener("storage", syncCopiedPalette);
+
+    return () => {
+      window.removeEventListener("focus", syncCopiedPalette);
+      window.removeEventListener("storage", syncCopiedPalette);
+    };
+  }, []);
+
   const boardStyle = useMemo(
     () => ({
       gridTemplateColumns: `repeat(${cols}, ${pixelSize}px)`,
@@ -169,6 +214,28 @@ export default function PixelArtPage() {
     () => grid.flat().filter((cell) => cell !== "transparent").length,
     [grid]
   );
+
+  const availableColors = useMemo(
+    () => [
+      ...copiedPalette,
+      ...DEFAULT_COLORS.filter(
+        (color) => color === "transparent" || !copiedPalette.includes(color.toUpperCase())
+      ),
+    ],
+    [copiedPalette]
+  );
+
+  const createSnapshot = (): EditorSnapshot => ({
+    rows,
+    cols,
+    pixelSize,
+    projectName,
+    grid: cloneGrid(grid),
+  });
+
+  const pushHistorySnapshot = (snapshot: EditorSnapshot) => {
+    setHistory((previous) => [...previous, snapshot].slice(-60));
+  };
 
   const paintCell = (row: number, col: number) => {
     setGrid((previous) => {
@@ -183,6 +250,14 @@ export default function PixelArtPage() {
   };
 
   const handleMouseDown = (row: number, col: number) => {
+    const nextColor = tool === "eraser" ? "transparent" : selectedColor;
+    if (tool === "fill") {
+      if (grid[row][col] === selectedColor) return;
+    } else if (grid[row][col] === nextColor) {
+      return;
+    }
+
+    pushHistorySnapshot(createSnapshot());
     setIsDrawing(true);
     paintCell(row, col);
   };
@@ -193,13 +268,16 @@ export default function PixelArtPage() {
   };
 
   const resetBoard = () => {
+    pushHistorySnapshot(createSnapshot());
     setGrid(makeGrid(rows, cols));
   };
 
   const resizeBoard = (nextRows: number, nextCols: number) => {
     const safeRows = clamp(nextRows, MIN_BOARD_SIZE, MAX_BOARD_SIZE);
     const safeCols = clamp(nextCols, MIN_BOARD_SIZE, MAX_BOARD_SIZE);
+    if (safeRows === rows && safeCols === cols) return;
 
+    pushHistorySnapshot(createSnapshot());
     setRows(safeRows);
     setCols(safeCols);
     setGrid((previous) => {
@@ -248,17 +326,15 @@ export default function PixelArtPage() {
 
         const safeRows = clamp(data.rows ?? 20, MIN_BOARD_SIZE, MAX_BOARD_SIZE);
         const safeCols = clamp(data.cols ?? 20, MIN_BOARD_SIZE, MAX_BOARD_SIZE);
-        const safePixelSize = clamp(
-          data.pixelSize ?? 22,
-          MIN_PIXEL_SIZE,
-          MAX_PIXEL_SIZE
-        );
+        const safePixelSize = clamp(data.pixelSize ?? 22, MIN_PIXEL_SIZE, MAX_PIXEL_SIZE);
+        const nextGrid = normalizeGrid(data.grid, safeRows, safeCols);
 
+        pushHistorySnapshot(createSnapshot());
         setRows(safeRows);
         setCols(safeCols);
         setPixelSize(safePixelSize);
         setProjectName(data.projectName || "pixel-art");
-        setGrid(normalizeGrid(data.grid, safeRows, safeCols));
+        setGrid(nextGrid);
       } catch {
         window.alert("ไฟล์ JSON ไม่ถูกต้อง");
       } finally {
@@ -269,7 +345,7 @@ export default function PixelArtPage() {
     reader.readAsText(file);
   };
 
-  const exportPNG = () => {
+  const exportImage = (format: "png" | "jpg") => {
     const canvas = document.createElement("canvas");
     canvas.width = cols * pixelSize;
     canvas.height = rows * pixelSize;
@@ -277,7 +353,12 @@ export default function PixelArtPage() {
     const context = canvas.getContext("2d");
     if (!context) return;
 
-    context.clearRect(0, 0, canvas.width, canvas.height);
+    if (format === "jpg") {
+      context.fillStyle = "#FFFFFF";
+      context.fillRect(0, 0, canvas.width, canvas.height);
+    } else {
+      context.clearRect(0, 0, canvas.width, canvas.height);
+    }
 
     for (let row = 0; row < rows; row += 1) {
       for (let col = 0; col < cols; col += 1) {
@@ -290,9 +371,27 @@ export default function PixelArtPage() {
     }
 
     const link = document.createElement("a");
-    link.download = `${projectName || "pixel-art"}.png`;
-    link.href = canvas.toDataURL("image/png");
+    const extension = format === "jpg" ? "jpg" : "png";
+    const mimeType = format === "jpg" ? "image/jpeg" : "image/png";
+    link.download = `${projectName || "pixel-art"}.${extension}`;
+    link.href = canvas.toDataURL(mimeType);
     link.click();
+  };
+
+  const handleUndo = () => {
+    setHistory((previous) => {
+      const snapshot = previous[previous.length - 1];
+      if (!snapshot) return previous;
+
+      setIsDrawing(false);
+      setRows(snapshot.rows);
+      setCols(snapshot.cols);
+      setPixelSize(snapshot.pixelSize);
+      setProjectName(snapshot.projectName);
+      setGrid(cloneGrid(snapshot.grid));
+
+      return previous.slice(0, -1);
+    });
   };
 
   return (
@@ -306,14 +405,14 @@ export default function PixelArtPage() {
           <section className="mx-auto mb-10 max-w-3xl text-center">
             <Badge variant="outline" className="mb-4 px-4 py-2 text-sm">
               <Grid3X3 className="mr-2 h-4 w-4" />
-              Pixel Pattern Studio
+              สตูดิโอลายพิกเซล
             </Badge>
             <h1 className="bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-4xl font-black leading-tight text-transparent md:text-6xl">
-              วาดลวดลายพิกเซลให้เข้ากับงานผ้าได้ในหน้าเดียว
+              ออกแบบลวดลายพิกเซลในหน้าเดียว
             </h1>
             <p className="mx-auto mt-4 max-w-2xl text-base text-foreground/70 md:text-lg">
-              ทดลองวางจังหวะลาย เติมสี ย่อขยายบอร์ด และส่งออกเป็น PNG หรือ JSON
-              เพื่อใช้ต่อในงานออกแบบลวดลายได้ทันที
+              ทดลองจัดจังหวะลาย วางสี ปรับขนาดบอร์ด และส่งออกเป็น PNG, JPG หรือ JSON
+              เพื่อนำไปใช้งานต่อได้ทันที
             </p>
           </section>
 
@@ -325,6 +424,15 @@ export default function PixelArtPage() {
               </p>
             </div>
             <div className="flex flex-wrap gap-2">
+              <Button
+                variant="outline"
+                className="gap-2"
+                onClick={handleUndo}
+                disabled={history.length === 0}
+              >
+                <Undo2 className="h-4 w-4" />
+                ย้อนกลับ
+              </Button>
               <Button variant="outline" className="gap-2" onClick={resetBoard}>
                 <RotateCcw className="h-4 w-4" />
                 รีเซ็ต
@@ -333,7 +441,11 @@ export default function PixelArtPage() {
                 <Download className="h-4 w-4" />
                 บันทึก JSON
               </Button>
-              <Button className="gap-2" onClick={exportPNG}>
+              <Button variant="outline" className="gap-2" onClick={() => exportImage("jpg")}>
+                <Download className="h-4 w-4" />
+                ส่งออก JPG
+              </Button>
+              <Button className="gap-2" onClick={() => exportImage("png")}>
                 <Download className="h-4 w-4" />
                 ส่งออก PNG
               </Button>
@@ -345,7 +457,7 @@ export default function PixelArtPage() {
               <CardHeader className="gap-2">
                 <CardTitle>ตั้งค่าพื้นฐาน</CardTitle>
                 <CardDescription>
-                  เลือกเครื่องมือ จัดการสี และกำหนดขนาดบอร์ดสำหรับลวดลายพิกเซล
+                  เลือกเครื่องมือ สี และขนาดบอร์ดสำหรับลวดลายพิกเซลของคุณ
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
@@ -377,7 +489,7 @@ export default function PixelArtPage() {
                       onClick={() => setTool("eraser")}
                     >
                       <Eraser className="h-4 w-4" />
-                      ลบ
+                      ยางลบ
                     </Button>
                     <Button
                       variant={tool === "fill" ? "default" : "outline"}
@@ -387,6 +499,51 @@ export default function PixelArtPage() {
                       <PaintBucket className="h-4 w-4" />
                       เทสี
                     </Button>
+                  </div>
+                </div>
+
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between gap-3">
+                    <Label>ชุดสีจาก Color Wheel</Label>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      className="h-8 px-2 text-xs"
+                      onClick={syncCopiedPalette}
+                    >
+                      <RefreshCcw className="h-3.5 w-3.5" />
+                      รีเฟรช
+                    </Button>
+                  </div>
+                  <div className="rounded-2xl border border-dashed border-border/70 bg-background/50 p-3">
+                    {copiedPalette.length ? (
+                      <div className="space-y-3">
+                        <p className="text-sm text-foreground/70">
+                          ใช้ชุดสีล่าสุดที่คัดลอกมาจากหน้า Color Wheel ได้ทันที
+                        </p>
+                        <div className="flex flex-wrap gap-2">
+                          {copiedPalette.map((color) => (
+                            <button
+                              key={`copied-${color}`}
+                              type="button"
+                              onClick={() => setSelectedColor(color)}
+                              title={color}
+                              className={`h-10 w-10 rounded-xl border-2 transition ${
+                                selectedColor === color
+                                  ? "border-primary shadow-sm shadow-primary/20"
+                                  : "border-border/80 hover:border-primary/40"
+                              }`}
+                              style={{ backgroundColor: color }}
+                            />
+                          ))}
+                        </div>
+                      </div>
+                    ) : (
+                      <p className="text-sm text-foreground/60">
+                        ยังไม่พบชุดสีที่คัดลอกจากหน้า Color Wheel
+                      </p>
+                    )}
                   </div>
                 </div>
 
@@ -417,7 +574,7 @@ export default function PixelArtPage() {
                 <div className="space-y-3">
                   <Label>สีสำหรับวาด</Label>
                   <div className="grid grid-cols-4 gap-2">
-                    {DEFAULT_COLORS.map((color) => {
+                    {availableColors.map((color) => {
                       const isTransparent = color === "transparent";
                       const isActive = selectedColor === color;
 
@@ -447,7 +604,7 @@ export default function PixelArtPage() {
                 <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-1">
                   <div className="rounded-2xl border border-border/70 bg-background/60 p-4">
                     <div className="mb-3 flex items-center justify-between">
-                      <span className="text-sm font-medium">Columns</span>
+                      <span className="text-sm font-medium">คอลัมน์</span>
                       <span className="text-sm text-foreground/65">{cols}</span>
                     </div>
                     <div className="flex gap-2">
@@ -470,7 +627,7 @@ export default function PixelArtPage() {
 
                   <div className="rounded-2xl border border-border/70 bg-background/60 p-4">
                     <div className="mb-3 flex items-center justify-between">
-                      <span className="text-sm font-medium">Rows</span>
+                      <span className="text-sm font-medium">แถว</span>
                       <span className="text-sm text-foreground/65">{rows}</span>
                     </div>
                     <div className="flex gap-2">
@@ -534,7 +691,7 @@ export default function PixelArtPage() {
                   </Button>
                   <Button variant="outline" className="gap-2" onClick={exportProject}>
                     <Download className="h-4 w-4" />
-                    เซฟ JSON
+                    บันทึก JSON
                   </Button>
                   <input
                     ref={jsonInputRef}
@@ -549,9 +706,9 @@ export default function PixelArtPage() {
 
             <Card className="border-border/70 bg-card/80 shadow-sm backdrop-blur">
               <CardHeader className="gap-2">
-                <CardTitle>พื้นที่วาดลาย</CardTitle>
+                <CardTitle>พื้นที่วาด</CardTitle>
                 <CardDescription>
-                  คลิกเพื่อวาด กดค้างแล้วลากต่อเนื่องได้ทันที หรือใช้ถังเทสีเพื่อเติมพื้นที่
+                  คลิกเพื่อวาด กดค้างแล้วลากเพื่อวาดต่อเนื่อง หรือใช้ถังเทสีเติมพื้นที่ได้ทันที
                 </CardDescription>
               </CardHeader>
               <CardContent className="overflow-auto pb-6">
@@ -589,7 +746,6 @@ export default function PixelArtPage() {
                 </div>
               </CardContent>
             </Card>
-
           </section>
         </div>
       </main>

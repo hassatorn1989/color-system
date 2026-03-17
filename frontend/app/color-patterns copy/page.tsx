@@ -16,7 +16,6 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { SvgComponents } from "./svg";
-import { colorizeSvgMarkup, resizeSvgMarkup } from "@/lib/svg-utils";
 
 interface Pattern {
   id: string;
@@ -153,11 +152,9 @@ export default function PaletteVisualizerPage() {
     ctx.fillStyle = backgroundHex;
     ctx.fillRect(0, 0, width, height);
 
-    const coloredSvg = colorizeSvgMarkup(svg, foregroundHex, {
-      width: tileSize,
-      height: tileSize,
-    });
-    if (!coloredSvg) return;
+    const coloredSvg = svg
+      .replace(/fill=".*?"/g, `fill="${foregroundHex}"`)
+      .replace(/stroke=".*?"/g, `stroke="${foregroundHex}"`);
 
     const image = new Image();
     image.onload = () => {
@@ -254,7 +251,10 @@ export default function PaletteVisualizerPage() {
                           <div
                             className="flex h-full w-full items-center justify-center rounded-sm"
                             dangerouslySetInnerHTML={{
-                              __html: resizeSvgMarkup(pattern.svg, 26, 26) ?? "",
+                              __html: pattern.svg.replace(
+                                /(width|height)=".*?"/g,
+                                'width="26" height="26"'
+                              ),
                             }}
                           />
                           <div className="pointer-events-none absolute inset-x-1 bottom-1 translate-y-2 rounded bg-foreground/90 px-1 py-0.5 text-[10px] text-background opacity-0 transition group-hover:translate-y-0 group-hover:opacity-100">
