@@ -71,7 +71,10 @@ export default function WovenColorsPage() {
               คลังสีผ้าทอ
             </h1>
             <p className="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-foreground/70 md:text-lg">
-              สำรวจชื่อสีผ้าทอพื้นถิ่นในรูปแบบที่ค้นหาและเรียกดูได้ง่าย
+              เบอร์สีผ้าทอ แต่ละชนิด และแต่ละยี่ห้อ
+              ได้ถูกเทียบค่าสีจากเส้นด้ายที่ย้อมจากสีแต่ละประเภท
+              อาจจะมีความคลาดเคลื่อน 15 - 30 % ตามชนิดของหน้าจอที่เปิดดู
+              สามารถนำค่าสีไปใช้ต่อได้ในการออกแบบและพัฒนาผลิตภัณฑ์
             </p>
           </div>
 
@@ -88,7 +91,8 @@ export default function WovenColorsPage() {
             <div className="inline-flex items-center gap-2 justify-self-start rounded-xl bg-muted/50 px-3 py-2 text-sm text-foreground/70 md:justify-self-end">
               <Sparkles className="h-4 w-4 text-accent" />
               <span>
-                แสดง {filteredWovenColors.length} จาก {wovenColors.length} รายการ
+                แสดง {filteredWovenColors.length} จาก {wovenColors.length}{" "}
+                รายการ
               </span>
             </div>
           </div>
