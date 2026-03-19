@@ -24,8 +24,8 @@ const contactHighlights = [
     title: "อีเมลสำหรับติดต่อ",
     description:
       "สอบถามการใช้งานระบบ แจ้งข้อเสนอแนะ หรือส่งข้อมูลเพื่อพัฒนาฟีเจอร์ต่อได้ที่อีเมลหลักของโครงการ",
-    value: "contact@sipator.com",
-    href: "mailto:contact@sipator.com",
+    value: "chayanisc@nu.ac.th",
+    href: "mailto:chayanisc@nu.ac.th",
     icon: Mail,
   },
   {
