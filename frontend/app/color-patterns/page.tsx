@@ -332,7 +332,7 @@ export default function PaletteVisualizerPage() {
 
             <Card className="border-border/70 bg-card/80 p-5 backdrop-blur">
               <div className="mb-4 flex items-center justify-between">
-                <h2 className="text-sm font-semibold text-foreground/80">พรีวิวแบบสด</h2>
+                <h2 className="text-sm font-semibold text-foreground/80"></h2>
                 <div className="flex gap-2">
                   <Button
                     variant="secondary"
