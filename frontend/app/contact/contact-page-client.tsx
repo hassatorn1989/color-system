@@ -139,21 +139,15 @@ export default function ContactPageClient() {
                   <p className="mt-2 text-sm leading-relaxed text-foreground/70">
                     {item.description}
                   </p>
-                  {item.href ? (
-                    <a
-                      href={item.href}
-                      className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-primary transition hover:opacity-80"
-                    >
-                      {item.value}
-                      {item.href.startsWith("/") ? (
-                        <ArrowRight className="h-4 w-4" />
-                      ) : null}
-                    </a>
-                  ) : (
-                    <p className="mt-4 text-sm font-medium text-foreground">
-                      {item.value}
-                    </p>
-                  )}
+                  <a
+                    href={item.href}
+                    className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-primary transition hover:opacity-80"
+                  >
+                    {item.value}
+                    {item.href.startsWith("/") ? (
+                      <ArrowRight className="h-4 w-4" />
+                    ) : null}
+                  </a>
                 </Card>
               );
             })}
@@ -273,7 +267,9 @@ export default function ContactPageClient() {
                     5. ข้อเสนอแนะเพื่อปรับปรุงข้อมูลหรือขยายฟีเจอร์ของแพลตฟอร์ม
                   </p>
                   <p>
-                    6. ทางเว็บไซต์เป็นการรวบรวมค่าสีที่ได้มาจากสีย้อมผ้ายี่ห้อต่าง ๆ โดยมไ่มีตัวแทนจำหน่าย
+                    6.
+                    ทางเว็บไซต์เป็นการรวบรวมค่าสีที่ได้มาจากสีย้อมผ้ายี่ห้อต่าง
+                    ๆ โดยมไ่มีตัวแทนจำหน่าย
                   </p>
                 </div>
               </Card>
