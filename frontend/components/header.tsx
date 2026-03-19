@@ -10,9 +10,14 @@ import { ModeToggle } from "./mode-toggle";
 
 const navItems = [
   { href: "/color-wheel", th: "วงล้อสี", en: "Color Wheel" },
-  { href: "/color-patterns", th: "ออกแบบลวดลาย", en: "Pattern Design" },
-  { href: "/woven-colors", th: "สีผ้าทอ", en: "Woven Colors" },
   { href: "/pixel-art", th: "วาดลายพิกเซล", en: "Pixel Art" },
+  { href: "/color-patterns", th: "ออกแบบลวดลาย", en: "Pattern Design" },
+  {
+    href: "/woven-colors",
+    th: "สีผ้าทอ",
+    en: "Woven Colors",
+    target: "_blank",
+  },
   {
     href: "/contrast-checker",
     th: "เครื่องมือช่วยการเข้าถึง",
@@ -76,6 +81,7 @@ export default function Header() {
               <Link
                 key={item.href}
                 href={item.href}
+                target={item.target}
                 className={`rounded-lg px-3 py-2 transition ${
                   isActive
                     ? "bg-primary text-primary-foreground shadow-sm shadow-primary/20"
@@ -87,7 +93,9 @@ export default function Header() {
                 </span>
                 <span
                   className={`block text-[11px] leading-tight ${
-                    isActive ? "text-primary-foreground/85" : "text-foreground/60"
+                    isActive
+                      ? "text-primary-foreground/85"
+                      : "text-foreground/60"
                   }`}
                 >
                   {item.en}
@@ -122,6 +130,7 @@ export default function Header() {
                 <Link
                   key={item.href}
                   href={item.href}
+                  target={item.target}
                   className={`rounded-lg px-3 py-2.5 transition ${
                     isActive
                       ? "bg-primary text-primary-foreground"
@@ -133,7 +142,9 @@ export default function Header() {
                   </span>
                   <span
                     className={`block text-[11px] leading-tight ${
-                      isActive ? "text-primary-foreground/85" : "text-foreground/60"
+                      isActive
+                        ? "text-primary-foreground/85"
+                        : "text-foreground/60"
                     }`}
                   >
                     {item.en}
