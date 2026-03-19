@@ -4,7 +4,14 @@ import type React from "react";
 
 import Link from "next/link";
 import { useState } from "react";
-import { ArrowRight, Clock3, Mail, MapPin, MessageSquareText, Sparkles } from "lucide-react";
+import {
+  ArrowRight,
+  Clock3,
+  Mail,
+  MapPin,
+  MessageSquareText,
+  Sparkles,
+} from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -29,14 +36,14 @@ const contactHighlights = [
     href: "/about",
     icon: MapPin,
   },
-  {
-    title: "เวลาตอบกลับ",
-    description:
-      "หากเป็นคำถามทั่วไปหรือข้อเสนอแนะเกี่ยวกับระบบ เราจะพยายามตอบกลับภายในเวลาทำการให้เร็วที่สุด",
-    value: "ประมาณ 24-48 ชั่วโมง",
-    href: "",
-    icon: Clock3,
-  },
+  // {
+  //   title: "เวลาตอบกลับ",
+  //   description:
+  //     "หากเป็นคำถามทั่วไปหรือข้อเสนอแนะเกี่ยวกับระบบ เราจะพยายามตอบกลับภายในเวลาทำการให้เร็วที่สุด",
+  //   value: "ประมาณ 24-48 ชั่วโมง",
+  //   href: "",
+  //   icon: Clock3,
+  // },
 ] as const;
 
 const faqItems = [
@@ -71,7 +78,9 @@ export default function ContactPageClient() {
   });
   const [submitted, setSubmitted] = useState(false);
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
     const { name, value } = event.target;
     setFormData((previous) => ({ ...previous, [name]: value }));
   };
@@ -114,7 +123,7 @@ export default function ContactPageClient() {
             </p>
           </section>
 
-          <section className="mb-8 grid gap-4 md:grid-cols-3">
+          <section className="mb-8 grid gap-4 md:grid-cols-2">
             {contactHighlights.map((item) => {
               const Icon = item.icon;
 
@@ -136,16 +145,27 @@ export default function ContactPageClient() {
                       className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-primary transition hover:opacity-80"
                     >
                       {item.value}
-                      {item.href.startsWith("/") ? <ArrowRight className="h-4 w-4" /> : null}
+                      {item.href.startsWith("/") ? (
+                        <ArrowRight className="h-4 w-4" />
+                      ) : null}
                     </a>
                   ) : (
-                    <p className="mt-4 text-sm font-medium text-foreground">{item.value}</p>
+                    <p className="mt-4 text-sm font-medium text-foreground">
+                      {item.value}
+                    </p>
                   )}
                 </Card>
               );
             })}
           </section>
-
+          <div className="mb-8 w-full text-center">
+            <p className="mx-auto max-w-3xl text-base leading-relaxed text-foreground/70 md:text-lg">
+              แพลตฟอร์มนี้เป็นส่วนหนึ่งของงานวิจัย
+              เรื่องการออกแบบและพัฒนาเครื่องมือสำหรับช่วยงานออกแบบผลิตภัณฑ์ชุมชน
+              โดยใช้ทุนทาง วัฒนธรรม และภูมิปัญญาท้องถิ่น :
+              กรณีศึกษากลุ่มผ้าทอมือ จังหวัดพิษณุโลก
+            </p>
+          </div>
           <section className="mb-12 grid gap-8 lg:grid-cols-[minmax(0,1.15fr)_minmax(320px,0.85fr)]">
             <Card className="border-border/70 bg-card/80 p-8 shadow-sm backdrop-blur">
               {submitted ? (
@@ -153,9 +173,12 @@ export default function ContactPageClient() {
                   <div className="mb-4 inline-flex rounded-full border border-primary/20 bg-primary/10 p-4">
                     <Sparkles className="h-8 w-8 text-primary" />
                   </div>
-                  <h2 className="text-2xl font-bold">ส่งข้อความเรียบร้อยแล้ว</h2>
+                  <h2 className="text-2xl font-bold">
+                    ส่งข้อความเรียบร้อยแล้ว
+                  </h2>
                   <p className="mt-3 max-w-md text-foreground/70">
-                    ขอบคุณที่ติดต่อ Sipator เราได้รับข้อความของคุณแล้ว และจะพยายามตอบกลับโดยเร็วที่สุด
+                    ขอบคุณที่ติดต่อ Sipator เราได้รับข้อความของคุณแล้ว
+                    และจะพยายามตอบกลับโดยเร็วที่สุด
                   </p>
                 </div>
               ) : (
@@ -233,19 +256,35 @@ export default function ContactPageClient() {
 
             <div className="space-y-6">
               <Card className="border-border/70 bg-card/80 p-6 shadow-sm backdrop-blur">
-                <h2 className="text-xl font-semibold">ติดต่อเรื่องไหนได้บ้าง</h2>
+                <h2 className="text-xl font-semibold">
+                  ติดต่อเรื่องไหนได้บ้าง
+                </h2>
                 <div className="mt-4 space-y-3 text-sm text-foreground/70">
-                  <p>1. การใช้งานวงล้อสีและการจับคู่สีสำหรับงานผ้าทอ</p>
-                  <p>2. การใช้งานคลังสีผ้าทอและการคัดลอกค่าสีไปออกแบบต่อ</p>
-                  <p>3. การทดลองออกแบบลวดลายด้วยเครื่องมือ pattern และ pixel art</p>
-                  <p>4. ข้อเสนอแนะเพื่อปรับปรุงข้อมูลหรือขยายฟีเจอร์ของแพลตฟอร์ม</p>
+                  <p>
+                    1. งานวิจัยที่เกียวข้องกับการสร้างแพลตฟอร์ม
+                    หรือตามทฤฎีที่ใช้ด้านการออกแบบ
+                  </p>
+                  <p>2. การใช้งานวงล้อสีและการจับคู่สีสำหรับงานผ้าทอ</p>
+                  <p>3. การใช้งานคลังสีผ้าทอและการคัดลอกค่าสีไปออกแบบต่อ</p>
+                  <p>
+                    4. การทดลองออกแบบลวดลายด้วยเครื่องมือ pattern และ pixel art
+                  </p>
+                  <p>
+                    5. ข้อเสนอแนะเพื่อปรับปรุงข้อมูลหรือขยายฟีเจอร์ของแพลตฟอร์ม
+                  </p>
+                  <p>
+                    6. ทางเว็บไซต์เป็นการรวบรวมค่าสีที่ได้มาจากสีย้อมผ้ายี่ห้อต่าง ๆ โดยมไ่มีตัวแทนจำหน่าย
+                  </p>
                 </div>
               </Card>
 
               <Card className="border-border/70 bg-gradient-to-br from-primary/8 via-secondary/10 to-accent/10 p-6 shadow-sm">
-                <h2 className="text-xl font-semibold">เครื่องมือที่เกี่ยวข้อง</h2>
+                <h2 className="text-xl font-semibold">
+                  เครื่องมือที่เกี่ยวข้อง
+                </h2>
                 <p className="mt-2 text-sm leading-relaxed text-foreground/70">
-                  หากต้องการทดลองใช้งานก่อนส่งคำถาม คุณสามารถเริ่มจากเครื่องมือหลักของระบบได้ทันที
+                  หากต้องการทดลองใช้งานก่อนส่งคำถาม
+                  คุณสามารถเริ่มจากเครื่องมือหลักของระบบได้ทันที
                 </p>
                 <div className="mt-4 flex flex-wrap gap-2">
                   <Button asChild variant="outline" size="sm">

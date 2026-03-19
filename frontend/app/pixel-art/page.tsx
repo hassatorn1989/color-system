@@ -118,14 +118,22 @@ function normalizeGrid(data: unknown, rows: number, cols: number): PixelGrid {
   return next;
 }
 
-function downloadTextFile(filename: string, content: string) {
-  const blob = new Blob([content], { type: "application/json" });
+function downloadFile(filename: string, content: string, type: string) {
+  const blob = new Blob([content], { type });
   const url = URL.createObjectURL(blob);
   const anchor = document.createElement("a");
   anchor.href = url;
   anchor.download = filename;
   anchor.click();
   URL.revokeObjectURL(url);
+}
+
+function escapeXml(value: string) {
+  return value
+    .replaceAll("&", "&amp;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;");
 }
 
 function floodFill(
@@ -302,9 +310,10 @@ export default function PixelArtPage() {
       grid,
     };
 
-    downloadTextFile(
+    downloadFile(
       `${projectName || "pixel-art"}.json`,
-      JSON.stringify(payload, null, 2)
+      JSON.stringify(payload, null, 2),
+      "application/json"
     );
   };
 
@@ -378,6 +387,37 @@ export default function PixelArtPage() {
     link.click();
   };
 
+  const exportSvg = () => {
+    const width = cols * pixelSize;
+    const height = rows * pixelSize;
+    const artTitle = escapeXml(projectName || "pixel-art");
+    const shapes: string[] = [];
+
+    for (let row = 0; row < rows; row += 1) {
+      for (let col = 0; col < cols; col += 1) {
+        const color = grid[row][col];
+        if (!color || color === "transparent") continue;
+
+        shapes.push(
+          `<rect x="${col * pixelSize}" y="${row * pixelSize}" width="${pixelSize}" height="${pixelSize}" fill="${escapeXml(color)}" />`
+        );
+      }
+    }
+
+    const svg = [
+      `<?xml version="1.0" encoding="UTF-8"?>`,
+      `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" width="${width}" height="${height}" role="img" aria-label="${artTitle}" shape-rendering="crispEdges">`,
+      ...shapes,
+      `</svg>`,
+    ].join("");
+
+    downloadFile(
+      `${projectName || "pixel-art"}.svg`,
+      svg,
+      "image/svg+xml;charset=utf-8"
+    );
+  };
+
   const handleUndo = () => {
     setHistory((previous) => {
       const snapshot = previous[previous.length - 1];
@@ -411,7 +451,7 @@ export default function PixelArtPage() {
               ออกแบบลวดลายพิกเซลในหน้าเดียว
             </h1>
             <p className="mx-auto mt-4 max-w-2xl text-base text-foreground/70 md:text-lg">
-              ทดลองจัดจังหวะลาย วางสี ปรับขนาดบอร์ด และส่งออกเป็น PNG, JPG หรือ JSON
+              ทดลองจัดจังหวะลาย วางสี ปรับขนาดบอร์ด และส่งออกเป็น PNG, JPG, SVG หรือ JSON
               เพื่อนำไปใช้งานต่อได้ทันที
             </p>
           </section>
@@ -444,6 +484,10 @@ export default function PixelArtPage() {
               <Button variant="outline" className="gap-2" onClick={() => exportImage("jpg")}>
                 <Download className="h-4 w-4" />
                 ส่งออก JPG
+              </Button>
+              <Button variant="outline" className="gap-2" onClick={exportSvg}>
+                <Download className="h-4 w-4" />
+                ส่งออก SVG
               </Button>
               <Button className="gap-2" onClick={() => exportImage("png")}>
                 <Download className="h-4 w-4" />

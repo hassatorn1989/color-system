@@ -25,7 +25,7 @@ const structuredData = {
   mainEntity: {
     "@type": "Organization",
     name: "Sipator",
-    email: "contact@sipator.com",
+    email: "chayanisc@nu.ac.th",
     description:
       "แพลตฟอร์มช่วยออกแบบระบบสีผ้าทอและลวดลาย โดยอ้างอิงสีที่นิยมใช้ในจังหวัดพิษณุโลก",
   },
