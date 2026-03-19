@@ -5,7 +5,7 @@ export const siteConfig = {
   description:
     "แพลตฟอร์มช่วยออกแบบระบบสีผ้าทอและลวดลาย โดยอ้างอิงสีที่นิยมใช้ในจังหวัดพิษณุโลก พร้อมเครื่องมือจับคู่สี คลังสีผ้าทอ และการตรวจสอบความคมชัด",
   siteUrl: (process.env.NEXT_PUBLIC_SITE_URL || "https://sipator.com").replace(/\/$/, ""),
-  ogImage: "/Logo.jpg",
+  ogImage: "/logo.png",
   locale: "th_TH",
 };
 

@@ -62,7 +62,7 @@ export default function Header() {
           className="inline-flex items-center gap-3 rounded-lg px-2 py-1 transition hover:bg-muted/70"
         >
           <Image
-            src="/Logo.jpg"
+            src="/logo.png"
             alt="Sipator logo"
             width={135}
             height={36}
