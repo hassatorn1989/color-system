@@ -195,18 +195,21 @@ const ColorHarmonyWheel = ({
     <div className="grid gap-6 lg:grid-cols-2">
       <Card className="overflow-hidden border-border/70 bg-card/85 p-5 backdrop-blur">
         <div className="rounded-xl border border-border/60 bg-background/70 p-4">
-            <Select value={groupColorId} onValueChange={selectColor}>
+          <h2 className="text-lg font-bold mb-0 text-gray-800">
+            ประเภทของสีแต่ละชนิด
+          </h2>
+          <Select value={groupColorId} onValueChange={selectColor}>
             <SelectTrigger className="w-full mb-5 h-11 border-border/70 bg-background/80">
               <SelectValue placeholder="Select color set" />
             </SelectTrigger>
             <SelectContent>
               {groupColor.map((item) => (
-              <SelectItem key={item.id} value={item.id}>
-                {item.name}
-              </SelectItem>
+                <SelectItem key={item.id} value={item.id}>
+                  {item.name}
+                </SelectItem>
               ))}
             </SelectContent>
-            </Select>
+          </Select>
 
           <div className="relative flex justify-center rounded-xl border border-border/60 bg-[radial-gradient(circle_at_20%_20%,rgba(255,255,255,0.3),transparent_40%),radial-gradient(circle_at_80%_0%,rgba(0,127,255,0.18),transparent_40%)] p-4">
             {renderColorWheel()}
